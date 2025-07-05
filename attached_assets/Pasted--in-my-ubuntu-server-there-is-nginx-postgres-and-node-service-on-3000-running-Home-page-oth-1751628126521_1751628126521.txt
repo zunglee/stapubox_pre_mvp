@@ -1,0 +1,117 @@
+
+in my ubuntu server , there is nginx , postgres , and node service on 3000 running.
+Home page & other static pages are served under htts://stapubox.com.
+on login page (https://stapubox.com/login), after clicking send otp , I am getting 404 resposne , 
+header resposne :
+Request URL
+https://stapubox.com/api/auth/send-otp
+Request Method
+POST
+Status Code
+404 Not Found
+Remote Address
+[2606:4700:3036::6815:f4f]:443
+Referrer Policy
+strict-origin-when-cross-origin
+
+response body : 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body>
+<pre>Cannot POST /api/auth/send-otp</pre>
+</body>
+</html>
+
+my  nginx configuration 
+##
+# StapuBox Root Domain Configuration
+# This serves StapuBox directly from https://stapubox.com/
+##
+
+# Map User-Agent to mobile detection variable
+map $http_user_agent $is_mobile {
+    default 0;
+    ~*android.*mobile 1;
+    ~*iphone 1;
+    ~*ipod 1;
+    ~*blackberry 1;
+    ~*iemobile 1;
+    ~*opera.*(mini|mobi) 1;
+    ~*mobile.*safari 1;
+    ~*mobile.*firefox 1;
+    ~*windows.*phone 1;
+    ~*mobile 1;
+    ~*mobi 1;
+    ~*(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge|maemo|midp|mmp|mobile.+firefox|netfront|opera.m(ob|in)i|palm(.os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows.ce|xda|xiino 1;
+}
+
+map $is_mobile $device_type {
+    default "desktop";
+    1 "mobile";
+}
+
+server { 
+    server_name www.stapubox.com stapubox.com; 
+
+    if ($host = www.stapubox.com) {
+        return 301 https://stapubox.com$request_uri;
+    }
+
+
+    # Legacy /app path redirect to root for existing links
+    location /app/ {
+        return 301 https://stapubox.com$request_uri;
+    }
+
+
+    # Error page handling
+    error_page 404 = @notfound;
+    location @notfound {
+        # Serve 404 through StapuBox instead of redirecting
+        proxy_pass http://localhost:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # StapuBox Main App - Serve from root (LOWEST PRIORITY)
+    location / {
+        proxy_pass http://localhost:3000/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_set_header X-Forwarded-Port $server_port;
+    }
+
+    listen 443 ssl;
+    ssl_certificate /etc/letsencrypt/live/stapubox.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/stapubox.com/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    # Rate Limiter
+    limit_req zone=one burst=20 nodelay;
+}
+
+# HTTP to HTTPS redirect
+server {
+    if ($host = www.stapubox.com) {
+        return 301 https://$host$request_uri;
+    }
+
+    if ($host = stapubox.com) {
+        return 301 https://$host$request_uri;
+    }
+
+    listen 80; 
+    server_name www.stapubox.com stapubox.com;
+    return 404;
+}
+

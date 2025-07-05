@@ -1,0 +1,79 @@
+#!/bin/bash
+
+echo "Creating simple nginx configuration update..."
+
+cd /apps/stapubox-replit-app
+
+# Create the nginx config addition
+cat > nginx-app-assets.conf << 'EOF'
+# Add this BEFORE the existing "location /app" block in your nginx config
+
+    location /app/assets/ {
+        proxy_pass http://localhost:3000/assets/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    location /app/ {
+        proxy_pass http://localhost:3000/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+    }
+EOF
+
+echo "Created nginx configuration file: nginx-app-assets.conf"
+echo ""
+echo "To fix the white page issue, update your nginx configuration:"
+echo ""
+echo "1. Edit: sudo nano /etc/nginx/sites-available/stapubox.com"
+echo "2. Replace the existing 'location /app' block with the content from nginx-app-assets.conf"
+echo "3. Test: sudo nginx -t"
+echo "4. Reload: sudo systemctl reload nginx"
+echo ""
+echo "This will properly route /app/assets/ to your Node.js server assets."
+
+# Also update the server to serve assets at the right path
+echo "Updating server asset serving..."
+
+cat > fix-server-assets.js << 'EOF'
+import fs from 'fs';
+
+let serverCode = fs.readFileSync('dist/index.js', 'utf8');
+
+// Ensure assets are served at /assets/ path for nginx proxy
+if (!serverCode.includes('express.static') || !serverCode.includes('/assets')) {
+    const lines = serverCode.split('\n');
+    
+    for (let i = 0; i < lines.length; i++) {
+        if (lines[i].includes('const httpServer = createServer(app2)')) {
+            const assetServing = `
+// Serve assets for nginx /app proxy
+app2.use('/assets', express.static(path.join(__dirname, 'dist/public/assets')));
+app2.use(express.static(path.join(__dirname, 'dist/public')));
+`;
+            lines.splice(i, 0, assetServing);
+            break;
+        }
+    }
+    
+    fs.writeFileSync('dist/index.js', lines.join('\n'));
+    console.log('✅ Added asset serving');
+} else {
+    console.log('Asset serving already configured');
+}
+EOF
+
+node fix-server-assets.js
+rm -f fix-server-assets.js
+
+# Restart to apply asset serving
+pm2 restart stapubox
+
+echo ""
+echo "Server updated. After updating nginx config, your app should work at https://stapubox.com/app"

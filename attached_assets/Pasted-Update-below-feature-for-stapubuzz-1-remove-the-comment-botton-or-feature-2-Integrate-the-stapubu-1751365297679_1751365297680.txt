@@ -1,0 +1,96 @@
+Update below feature for stapubuzz:
+
+1.remove the comment botton or feature
+
+2.Integrate the stapubuzz (newfeed) wih the api endpoint to get  the news:
+=> actual GET endpoint to get news : https://stapubox.com/buzz/digest/api?sids=7020104,7020111&page=1&cnt=10
+ => data will be under key name "data"->"buzz_digest".
+
+ where sids => sports_id (mentioned in point 4)
+Sample response : 
+{"status":"success","msg":"Data fetched successfully","err":null,"data":{"buzz_digest":[{"sid":7030805,"buzz_id":2,"sname":"chess","title":"a","summary":"b","src_name":"c","src_link":"https://timesofindia.indiatimes.com/life-style/spotlight/chess-prodigies-the-worlds-youngest-chess-phenoms-of-2025/articleshow/122144037.cms","img_src":"","favicon_src":"","publish_time":"2025-06-29T22:08:59","like_cnt":null,"dislike_cnt":null,"share_cnt":null,"view_cnt":null,"liked":false,"viewed":false},{"sid":7030805,"buzz_id":1,"sname":"f","title":"dfd","summary":"a","src_name":"dfdf","src_link":"https://timesofindia.indiatimes.com/sports/chess/drama-fide-slams-vladimir-kramniks-defamation-lawsuit-against-david-navara-brings-a-lot-of-harm-to-chess-community/articleshow/122143534.cms","img_src":"","favicon_src":"","publish_time":"2025-06-29T22:06:09","like_cnt":null,"dislike_cnt":null,"share_cnt":null,"view_cnt":null,"liked":false,"viewed":false}]}}
+
+3.Store the information of liked and shared buzz_id by user (both logged in / logged out),  in a table structure similar like 
+
+
+CREATE TABLE fieldbuzz_interactions (
+     id                   int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+     digest_id            int(11) NOT NULL,        
+     player_id            int(11) DEFAULT NULL,
+     spectator_code       VARCHAR(64) DEFAULT NULL,
+     liked                BOOLEAN DEFAULT FALSE,
+     disliked             BOOLEAN DEFAULT FALSE,
+     shared               BOOLEAN DEFAULT FALSE,
+     viewed               BOOLEAN DEFAULT FALSE,
+     liked_at             timestamp DEFAULT NULL,
+     disliked_at          timestamp DEFAULT NULL,
+     shared_at            timestamp DEFAULT NULL,
+     viewd_at             timestamp DEFAULT NULL,
+     update_ts            timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE NOW(),
+     entry_ts             timestamp DEFAULT CURRENT_TIMESTAMP,
+     INDEX idx_digest_id (`digest_id`),
+     INDEX idx_digest_player_id (`digest_id`,`player_id`),
+     INDEX idx_digest_spect_id (`digest_id`,`spectator_code`)
+);
+
+where 
+digest_id is the buzz_id
+player_id is UserId
+spectator_code  (UUID unique code in case of nonlogged in case) (let me know the code generation logic)
+
+
+
+4. Below are the sports Id and name. use it to fetch news for that sports.
+{id:7011808,name: 'archery'},
+{id:7020104,name: 'badminton'},
+{id:7020111,name: 'basketball'},
+{id:7021524,name: 'boxing'},
+{id:7030805,name: 'chess'},
+{id:7030918,name: 'cricket'},
+{id:7032525,name: 'cycling'},
+{id:7040913,name: 'discus throw'},
+{id:7060514,name: 'fencing'},
+{id:7061515,name: 'football'},
+{id:7071215,name: 'golf'},
+{id:7071325,name: 'gymnastics'},
+{id:7080113,name: 'hammer throw'},
+{id:7080917,name: 'high jump'},
+{id:7080315,name: 'hockey'},
+{id:7100122,name: 'javelin throw'},
+{id:7102115,name: 'judo'},
+{id:7110102,name: 'kabaddi'},
+{id:7110815,name: 'kho-kho'},
+{id:7121514,name: 'long jump'},
+{id:7122115,name: 'ludo'},
+{id:7130118,name: 'marathon'},
+{id:7131801,name: 'martial arts - karate'},
+{id:7160913,name: 'pickleball'},
+{id:7161215,name: 'polo'},
+{id:7181321,name: 'running'},
+{id:7190112,name: 'sailing'},
+{id:7190815,name: 'shooting'},
+{id:7191508,name: 'shot put'},
+{id:7191111,name: 'skating'},
+{id:7191711,name: 'squash'},
+{id:7192118,name: 'surfing'},
+{id:7192313,name: 'swimming'},
+{id:7200122,name: 'table tennis'},
+{id:7200511,name: 'taekwondo'},
+{id:7200514,name: 'tennis'},
+{id:7200815,name: 'throwball'},
+{id:7201816,name: 'triple jump'},
+{id:7221512,name: 'volleyball'},
+{id:7230519,name: 'weightlifting'},
+{id:7231805,name: 'wrestling'},
+
+5.) by default , on first time page , no sids will be sent in the api hit. Api will respond with 10 news , show it on the page
+6.) in right side. above first news card . give a   drop down with below feature.
+    a.) it should should show list of sports ( with their icon )mentioned 
+    b.) it should be multiselect 
+    c.) as soon as user select , a chip with that sports name( Camel Case) and small cross icon should be added adjacent to drop dwon in left side. as soon as user unselect or click on chip cross, it should be removed.
+    d.) 5 chips should be displayed , on adding 6th , first one should be hidden (not removed).
+    e.) as soon as  drop down closes, it should hit the api with sids selected. 
+
+ on right above first news card. search among the list provided. Search should be substring search enable. I mean on typing "bt" suggestor should show badminton , basketball both . 
+
+Ask me if u have any doubt

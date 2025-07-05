@@ -1,0 +1,97 @@
+🔍 Examining the actual server code structure...
+📋 Finding server.listen calls:
+2123-    console.error("\u274C Failed to start news ingestion service:", error);
+2124-  }
+2125-  const httpServer = createServer(app2);
+2126-
+2127-// DEPLOYMENT FIX: Force port binding
+2128:const __server = httpServer.listen(process.env.PORT || 3000, '0.0.0.0', () => {
+2129-  console.log(`🚀 StapuBox server running on port ${process.env.PORT || 3000}`);
+2130-  console.log(`📡 Server accessible at http://localhost:${process.env.PORT || 3000}`);
+2131-});
+2132-
+2133-__server.on('error', (err) => {
+--
+2464-    await setupVite(app, server);
+2465-  } else {
+2466-    serveStatic(app);
+2467-  }
+2468-  const port = 5e3;
+2469:  server.listen({
+2470-    port,
+2471-    host: "0.0.0.0",
+2472-    reusePort: true
+2473-  }, () => {
+2474-    log(`serving on port ${port}`);
+
+📋 Finding HTTP server creation:
+170-import cookieParser from "cookie-parser";
+171-
+172-// server/routes.ts
+173:import { createServer } from "http";
+174-import multer from "multer";
+175-
+176-// shared/schema.ts
+--
+2122-  } catch (error) {
+2123-    console.error("\u274C Failed to start news ingestion service:", error);
+2124-  }
+2125:  const httpServer = createServer(app2);
+2126-
+2127-// DEPLOYMENT FIX: Force port binding
+2128:const __server = httpServer.listen(process.env.PORT || 3000, '0.0.0.0', () => {
+2129-  console.log(`🚀 StapuBox server running on port ${process.env.PORT || 3000}`);
+2130-  console.log(`📡 Server accessible at http://localhost:${process.env.PORT || 3000}`);
+2131-});
+--
+2146-  });
+2147-});
+2148-
+2149:  return httpServer;
+2150-}
+2151-
+2152-// server/vite.ts
+2153-import express from "express";
+2154-import fs from "fs";
+2155-import path2 from "path";
+2156:import { createServer as createViteServer, createLogger } from "vite";
+2157-
+2158-// vite.config.ts
+2159-import { defineConfig } from "vite";
+
+📋 Finding port references:
+6:var __export = (target, all) => {
+12:var email_exports = {};
+13:__export(email_exports, {
+18:import nodemailer from "nodemailer";
+72:    const transporter = nodemailer.createTransport({
+74:      port: 587,
+84:    const info = await transporter.sendMail({
+169:import express2 from "express";
+170:import cookieParser from "cookie-parser";
+173:import { createServer } from "http";
+
+📋 Finding the end of the file (where we can add code):
+  app.use((err, _req, res, _next) => {
+    const status = err.status || err.statusCode || 500;
+    const message = err.message || "Internal Server Error";
+    res.status(status).json({ message });
+    throw err;
+  });
+  if (app.get("env") === "development") {
+    await setupVite(app, server);
+  } else {
+    serveStatic(app);
+  }
+  const port = 5e3;
+  server.listen({
+    port,
+    host: "0.0.0.0",
+    reusePort: true
+  }, () => {
+    log(`serving on port ${port}`);
+  });
+})();
+
+📋 Checking if our patch was actually added:
+2129:  console.log(`🚀 StapuBox server running on port ${process.env.PORT || 3000}`);

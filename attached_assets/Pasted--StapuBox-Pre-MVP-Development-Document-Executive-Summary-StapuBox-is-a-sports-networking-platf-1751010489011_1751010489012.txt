@@ -1,0 +1,531 @@
+# StapuBox Pre-MVP Development Document
+
+## Executive Summary
+
+StapuBox is a sports networking platform designed to connect players with players and coaches based on location, skill level, and activity preferences. This document outlines the complete development requirements for the pre-MVP to validate the core hypothesis that players struggle to find suitable playing partners and coaches.
+
+## Core Value Proposition
+
+**Problem**: Players cannot easily find other players or coaches at their skill level in their vicinity across various sports activities.
+
+**Solution**: A searchable database of players and coaches with detailed profiles, location-based filtering, and a mutual interest system for connections.
+
+---
+
+## 1. User Types & Personas
+
+### Primary Users
+1. **Players**: Individuals looking for playing partners at their skill level
+2. **Coaches**: Certified/experienced individuals offering coaching services
+3. **Visitors**: Non-registered users exploring the platform
+
+### User Journey Mapping
+
+#### Non-Registered User Journey
+```
+Landing Page → Browse Database → View Profiles → Try to Send Interest → Redirect to Registration → Complete Registration → Return to Profile → Send Interest
+```
+
+#### Registered User Journey
+```
+Login → Dashboard → Search Database → View Profiles → Send Interest → Manage Interests → Accept/Decline → Get Contact Details → Connect Outside Platform
+```
+
+---
+
+## 2. Feature Specifications
+
+### 2.1 Core Features (Must-Have)
+
+#### Authentication System
+- **OTP-based login** (2Factor SMS integration)
+- **24-hour session management** with auto-logout
+- **5-minute cooldown** for failed OTP attempts
+- **Phone number as primary identifier**
+
+#### User Registration Flow
+**Player Registration:**
+1. Name (required)
+2. Phone number with OTP verification (required)
+3. Email (optional)
+4. Location via GPS + Google Maps API (required)
+5. Select 1-5 sports (2 primary, 3 secondary) (required)
+6. Skill levels for each sport (required for primary) (required)
+7. Company/Workplace (required)
+8. Date of Birth (required)
+9. Profile photo upload (optional)
+10. T&C acceptance (required)
+
+**Coach Registration:**
+1. Name (required)
+2. Phone number with OTP verification (required)
+3. Email (optional)
+4. Location via GPS + Google Maps API (required)
+5. Select up to 2 coaching activities (required)
+6. Skill levels for coaching (required)
+7. Years of coaching experience (required)
+8. Certifications/Accreditations (optional)
+9. Bio section (optional)
+10. Company/Workplace (required)
+11. Date of Birth (required)
+12. Profile photo upload (optional)
+13. T&C acceptance (required)
+
+#### Profile Management
+- **Profile cards** with activity highlights
+- **Detailed profile views** with complete information
+- **Profile editing** (all fields except phone number)
+- **Profile visibility settings**:
+  - Open to All
+  - Only visible to people I send interest to
+- **Profile deletion** with warning confirmation
+
+#### Search & Discovery
+- **Searchable database** accessible to all users
+- **Filter system**:
+  - User type (Player/Coach toggle)
+  - Location (10km radius default, city-based auto-filter)
+  - Society/Area
+  - Activity/Sport
+  - Skill Level
+  - Workplace
+  - Age
+  - Gender
+  - Coaching Experience (coaches only)
+- **No results handling**: "We are still in the early stages of building the world's first sports network and will soon have many more users. Until then, relax your filters may be 🙂"
+
+#### Interest Management System
+- **Send Interest** button on profile cards and detailed views
+- **Daily limit**: 10 interests per user
+- **Interest workflow**:
+  1. User A sends interest to User B
+  2. User B receives SMS notification
+  3. User B logs in to accept/decline
+  4. If accepted: Both users get SMS with contact details
+  5. Both users see each other in "Accepted" bucket
+- **Interest tracking buckets**:
+  - Interests Received
+  - Interests Sent
+  - Accepted
+  - Declined
+- **Interest withdrawal** possible for sent interests
+- **Re-interest restriction**: Cannot send interest to same person for 1 week after decline
+
+#### Dynamic Sports Feed
+- **Sports news content** via backend API
+- **Engagement features** (logged-in users only):
+  - Like/Clap functionality
+  - Share to external platforms (WhatsApp, etc.)
+- **Read-only for non-logged users**
+
+### 2.2 Supporting Features
+
+#### Static Pages
+- **About Us** with sub-sections:
+  - Mission/Vision with social links
+  - Careers section with resume upload form
+  - Join the Mission (investor deck request form)
+  - Terms & Conditions
+  - Privacy Policy
+
+#### Settings & Account Management
+- **Privacy settings** modification
+- **Profile deletion** with data erasure warning
+- **Logout functionality**
+- **Session management**
+
+---
+
+## 3. Technical Architecture
+
+### 3.1 Technology Stack Recommendations
+
+#### Frontend (Mobile-First)
+- **React.js** with responsive design
+- **Tailwind CSS** for styling
+- **PWA-ready** structure (future-proofing)
+
+#### Backend
+- **Node.js** with Express.js
+- **MySQL** database (as specified)
+- **RESTful API** design
+
+#### Third-Party Integrations
+- **2Factor SMS API** for OTP and notifications
+- **Google Maps API** for location services
+- **Google Drive API** for photo storage
+- **Dynamic sports feed API** (client-provided)
+
+#### Infrastructure
+- **Responsive web application**
+- **India-focused** deployment
+- **Automatic image resizing** for profile photos
+
+### 3.2 Database Schema Design
+
+#### Users Table
+```sql
+users (
+  id (PRIMARY KEY),
+  phone_number (UNIQUE),
+  name,
+  email,
+  user_type (ENUM: 'player', 'coach'),
+  date_of_birth,
+  age (calculated),
+  workplace,
+  bio,
+  profile_photo_url,
+  location_coordinates,
+  location_name,
+  city,
+  society_area,
+  profile_visibility (ENUM: 'public', 'interest_only'),
+  is_active,
+  created_at,
+  updated_at
+)
+```
+
+#### User Activities Table
+```sql
+user_activities (
+  id (PRIMARY KEY),
+  user_id (FOREIGN KEY),
+  activity_name,
+  skill_level (ENUM: 'beginner', 'learner', 'intermediate', 'advanced', 'expert'),
+  is_primary,
+  coaching_experience_years (for coaches),
+  certifications
+)
+```
+
+#### Interests Table
+```sql
+interests (
+  id (PRIMARY KEY),
+  sender_id (FOREIGN KEY),
+  receiver_id (FOREIGN KEY),
+  status (ENUM: 'pending', 'accepted', 'declined', 'withdrawn'),
+  sent_at,
+  responded_at,
+  UNIQUE(sender_id, receiver_id)
+)
+```
+
+#### Career Applications Table
+```sql
+career_applications (
+  id (PRIMARY KEY),
+  name,
+  email,
+  phone,
+  resume_url,
+  contribution_area,
+  submitted_at
+)
+```
+
+#### Investor Inquiries Table
+```sql
+investor_inquiries (
+  id (PRIMARY KEY),
+  name,
+  business_email,
+  phone,
+  submitted_at
+)
+```
+
+### 3.3 API Endpoints
+
+#### Authentication
+- `POST /api/auth/send-otp` - Send OTP to phone number
+- `POST /api/auth/verify-otp` - Verify OTP and login
+- `POST /api/auth/logout` - Logout user
+
+#### User Management
+- `POST /api/users/register` - Register new user
+- `GET /api/users/profile` - Get user profile
+- `PUT /api/users/profile` - Update user profile
+- `DELETE /api/users/profile` - Delete user account
+
+#### Search & Discovery
+- `GET /api/users/search` - Search users with filters
+- `GET /api/users/:id` - Get specific user profile
+
+#### Interest Management
+- `POST /api/interests/send` - Send interest
+- `GET /api/interests/received` - Get received interests
+- `GET /api/interests/sent` - Get sent interests
+- `PUT /api/interests/:id/accept` - Accept interest
+- `PUT /api/interests/:id/decline` - Decline interest
+- `DELETE /api/interests/:id` - Withdraw sent interest
+
+#### Content
+- `GET /api/feed` - Get sports news feed
+- `POST /api/feed/:id/like` - Like feed item
+- `POST /api/applications/career` - Submit career application
+- `POST /api/applications/investor` - Submit investor inquiry
+
+---
+
+## 4. User Interface Design Guidelines
+
+### 4.1 Design Principles
+- **Mobile-first** responsive design
+- **Activity-focused** profile cards
+- **Clean, sports-oriented** visual theme
+- **Different color themes** for players vs coaches
+- **Intuitive navigation** with hamburger menu on mobile
+
+### 4.2 Key UI Components
+
+#### Header Navigation
+**Non-logged in:**
+- StapuBox (logo/brand)
+- Feed
+- About Us
+- Sign In/Sign Up
+
+**Logged in:**
+- StapuBox
+- Feed
+- My Profile
+- User name with profile pic (dropdown: Settings, Logout)
+
+#### Profile Cards
+**Player Cards:**
+- Profile picture
+- Primary activities & skill levels (highlighted)
+- City location
+- Residence area
+- Workplace
+- "Send Interest" button / "Interest Pending" status
+
+**Coach Cards:**
+- Profile picture
+- Coaching activities & skill levels (highlighted)
+- Coaching experience
+- City location
+- Residence area
+- Different color theme from player cards
+- "Send Interest" button / "Interest Pending" status
+
+#### Search Interface
+- Player/Coach toggle at the top
+- Filter panel with all search criteria
+- Grid layout for profile cards
+- Infinite scroll or pagination
+
+#### Interest Management Dashboard
+- Tab-based interface:
+  - Interests Received
+  - Interests Sent
+  - Accepted
+  - Declined
+- Action buttons for accept/decline
+- Contact details reveal for accepted interests
+
+---
+
+## 5. Business Logic & Rules
+
+### 5.1 Core Rules
+- **Maximum 10 interests** per user per day
+- **Mutual acceptance required** before contact sharing
+- **One profile type** per phone number (player OR coach)
+- **Location mandatory** for registration
+- **Primary activity selection required** for players
+- **Contact details hidden** until mutual interest acceptance
+- **Profile visibility** affects search results
+- **24-hour session** expiry with auto-logout
+
+### 5.2 Edge Cases & Handling
+
+#### Registration Edge Cases
+- **Duplicate phone numbers**: Prevent multiple registrations
+- **GPS failure**: Manual location entry via Google Maps
+- **Photo upload failure**: Allow skip with retry option
+- **Incomplete profiles**: Allow save and continue later
+
+#### Interest System Edge Cases
+- **Simultaneous interests**: Both users instantly connected
+- **Interest limit reached**: Clear error message
+- **Withdrawn interests**: Clean removal from receiver's list
+- **Profile deletion**: Clean up associated interests
+
+#### Search & Discovery Edge Cases
+- **No results**: Encouraging message with filter relaxation suggestion
+- **Profile updates during viewing**: Show updated data on refresh
+- **Concurrent actions**: Handle race conditions gracefully
+
+---
+
+## 6. Integration Requirements
+
+### 6.1 SMS Integration (2Factor)
+- **OTP delivery** for registration and login
+- **Interest notifications** for receivers
+- **Contact sharing** for accepted interests
+- **Retry mechanism** for failed SMS delivery
+- **Rate limiting** and cost management
+
+### 6.2 Google Maps Integration
+- **Location selection** during registration
+- **Coordinate storage** for radius-based search
+- **Address resolution** for display purposes
+- **Fallback** for API failures
+
+### 6.3 File Storage (Google Drive)
+- **Profile photo upload** and storage
+- **Resume upload** for career applications
+- **Automatic image resizing** for optimization
+- **Secure URL generation** for access
+
+---
+
+## 7. Performance & Scalability
+
+### 7.1 Performance Requirements
+- **Mobile-optimized** loading times
+- **Image compression** for profile photos
+- **Efficient database queries** with proper indexing
+- **Caching strategy** for frequently accessed data
+
+### 7.2 Scalability Considerations
+- **Database indexing** on search fields
+- **API rate limiting** to prevent abuse
+- **Horizontal scaling** capability
+- **CDN integration** for static assets
+
+---
+
+## 8. Security & Privacy
+
+### 8.1 Data Protection
+- **Phone number encryption** in database
+- **Contact details protection** until mutual acceptance
+- **Profile visibility controls** implementation
+- **Secure file upload** validation
+
+### 8.2 User Safety
+- **Interest spam prevention** with daily limits
+- **Profile deletion** with complete data erasure
+- **No verification required** for activity levels (self-reported)
+- **Clean interest withdrawal** process
+
+---
+
+## 9. Testing Strategy
+
+### 9.1 Functional Testing
+- **Registration flows** for both user types
+- **Search and filtering** functionality
+- **Interest management** end-to-end workflows
+- **SMS delivery** and OTP verification
+- **Profile management** operations
+
+### 9.2 Integration Testing
+- **Third-party API** integrations
+- **Database operations** and data integrity
+- **File upload** and storage processes
+- **Cross-browser compatibility**
+
+### 9.3 User Acceptance Testing
+- **Mobile-first** experience validation
+- **User flow** completion rates
+- **Interest conversion** metrics
+- **Search effectiveness** validation
+
+---
+
+## 10. Deployment & Launch Strategy
+
+### 10.1 Pre-Launch Requirements
+- **Domain setup**: www.stapubox.com
+- **SSL certificate** installation
+- **Database migration** scripts
+- **Environment configuration**
+- **Third-party API** key configuration
+
+### 10.2 Launch Phases
+1. **Alpha Testing**: Internal team validation
+2. **Beta Testing**: Limited user group (50-100 users)
+3. **Soft Launch**: City-specific launch
+4. **Full Launch**: India-wide rollout
+
+### 10.3 Success Metrics Tracking
+- **Registration conversion** rate
+- **Search-to-interest** ratio
+- **Interest acceptance** rate
+- **User retention** metrics
+- **Geographic distribution** analysis
+
+---
+
+## 11. Future Considerations
+
+### 11.1 Post-MVP Enhancements
+- **In-app messaging** system
+- **Group activity** organization
+- **Coach verification** system
+- **Premium features** implementation
+- **Native mobile apps**
+
+### 11.2 Scalability Roadmap
+- **Multi-city expansion**
+- **International markets**
+- **Advanced matching** algorithms
+- **Community features**
+- **Monetization** strategies
+
+---
+
+## 12. Risk Assessment & Mitigation
+
+### 12.1 Technical Risks
+- **Third-party API** dependency: Implement fallbacks
+- **SMS delivery** issues: Multiple provider backup
+- **Database performance**: Proper indexing and optimization
+- **Mobile compatibility**: Extensive testing across devices
+
+### 12.2 Business Risks
+- **User acquisition**: Strong onboarding and value proposition
+- **Network effects**: Focus on dense city-wise launches
+- **Competition**: Rapid feature development and user feedback
+- **Spam/abuse**: Robust reporting and moderation systems
+
+---
+
+## Development Timeline Estimate
+
+### Phase 1: Foundation (Weeks 1-3)
+- Database schema design and setup
+- Basic authentication system
+- User registration flows
+- Core API development
+
+### Phase 2: Core Features (Weeks 4-6)
+- Profile management system
+- Search and discovery functionality
+- Interest management system
+- SMS integration
+
+### Phase 3: Integration & Polish (Weeks 7-8)
+- Google Maps integration
+- File upload system
+- Sports feed integration
+- UI/UX refinement
+
+### Phase 4: Testing & Deployment (Weeks 9-10)
+- Comprehensive testing
+- Performance optimization
+- Production deployment
+- Launch preparation
+
+**Total Estimated Timeline: 10 weeks**
+
+---
+
+This comprehensive document provides the complete blueprint for StapuBox pre-MVP development, covering all aspects from technical architecture to business logic, ensuring a robust foundation for validating the core hypothesis while maintaining scalability for future growth.

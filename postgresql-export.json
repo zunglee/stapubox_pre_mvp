@@ -1,0 +1,292 @@
+{
+  "users": [
+    {
+      "id": 4,
+      "phone_number": "9643673900",
+      "name": "Navin Kumar",
+      "email": null,
+      "user_type": "player",
+      "date_of_birth": "1987-09-29",
+      "age": 37,
+      "workplace": "Infoedge",
+      "bio": null,
+      "profile_photo_url": null,
+      "location_coordinates": "",
+      "location_name": "Noida, UP",
+      "city": "Noida, UP",
+      "society_area": "CGEWHO Kendriya Vihar",
+      "profile_visibility": "public",
+      "is_active": true,
+      "created_at": "2025-06-30T11:25:11.574Z",
+      "updated_at": "2025-06-30T11:25:11.574Z"
+    },
+    {
+      "id": 5,
+      "phone_number": "8406863855",
+      "name": "Muskan Agrawal",
+      "email": "",
+      "user_type": "player",
+      "date_of_birth": "1999-09-02",
+      "age": 25,
+      "workplace": "StapuBox",
+      "bio": "",
+      "profile_photo_url": null,
+      "location_coordinates": "28.7040592,77.10249019999999",
+      "location_name": "Saket, New Delhi, Delhi 110017, India",
+      "city": "Delhi, DL",
+      "society_area": "Saket",
+      "profile_visibility": "public",
+      "is_active": true,
+      "created_at": "2025-06-30T12:34:16.837Z",
+      "updated_at": "2025-06-30T12:34:16.837Z"
+    },
+    {
+      "id": 6,
+      "phone_number": "9289302236",
+      "name": "Shubham Raj",
+      "email": "",
+      "user_type": "coach",
+      "date_of_birth": "1992-07-23",
+      "age": 32,
+      "workplace": "Infoedge",
+      "bio": "",
+      "profile_photo_url": null,
+      "location_coordinates": "28.500195723832768,77.41501999484808",
+      "location_name": "Paras Tierea, Sector 137, Noida, Uttar Pradesh 201305, India",
+      "city": "Noida",
+      "society_area": "Paras Tierea",
+      "profile_visibility": "public",
+      "is_active": true,
+      "created_at": "2025-06-30T13:45:53.643Z",
+      "updated_at": "2025-06-30T13:45:53.643Z"
+    },
+    {
+      "id": 10,
+      "phone_number": "9711239143",
+      "name": "Ankitesh Kushwaha",
+      "email": "ankiteshiiita@gmail.com",
+      "user_type": "player",
+      "date_of_birth": "1991-08-31",
+      "age": 33,
+      "workplace": "Stapubox",
+      "bio": "I am batmat",
+      "profile_photo_url": null,
+      "location_coordinates": "17.1999602,78.5505481",
+      "location_name": "23, Kanchi Gachibowli Rd, near Citizens Hospital, Nallagandla, Telangana 500019, India",
+      "city": "Rangareddy, TS",
+      "society_area": "Aparna Cyberlife",
+      "profile_visibility": "public",
+      "is_active": true,
+      "created_at": "2025-07-01T11:36:07.381Z",
+      "updated_at": "2025-07-01T11:36:07.381Z"
+    },
+    {
+      "id": 11,
+      "phone_number": "9910880270",
+      "name": "Abhishek",
+      "email": "",
+      "user_type": "player",
+      "date_of_birth": "1983-06-20",
+      "age": 42,
+      "workplace": "Fluence",
+      "bio": "",
+      "profile_photo_url": null,
+      "location_coordinates": "28.4594965,77.0266383",
+      "location_name": "Godrej Aria, Sector 79, Gurugram, Haryana 122051, India",
+      "city": "Gurugram, HR",
+      "society_area": "Godrej Aria",
+      "profile_visibility": "public",
+      "is_active": true,
+      "created_at": "2025-07-01T17:23:45.121Z",
+      "updated_at": "2025-07-01T17:23:45.121Z"
+    }
+  ],
+  "user_activities": [
+    {
+      "id": 11,
+      "user_id": 4,
+      "activity_name": "Cricket",
+      "skill_level": "intermediate",
+      "is_primary": false,
+      "coaching_experience_years": null,
+      "certifications": null
+    },
+    {
+      "id": 12,
+      "user_id": 4,
+      "activity_name": "Badminton",
+      "skill_level": "advanced",
+      "is_primary": true,
+      "coaching_experience_years": null,
+      "certifications": null
+    },
+    {
+      "id": 13,
+      "user_id": 5,
+      "activity_name": "Gym",
+      "skill_level": "intermediate",
+      "is_primary": true,
+      "coaching_experience_years": null,
+      "certifications": null
+    },
+    {
+      "id": 14,
+      "user_id": 5,
+      "activity_name": "Running",
+      "skill_level": "learner",
+      "is_primary": false,
+      "coaching_experience_years": null,
+      "certifications": null
+    },
+    {
+      "id": 15,
+      "user_id": 6,
+      "activity_name": "Gym",
+      "skill_level": "intermediate",
+      "is_primary": true,
+      "coaching_experience_years": 2,
+      "certifications": "A+"
+    },
+    {
+      "id": 16,
+      "user_id": 10,
+      "activity_name": "Badminton",
+      "skill_level": "intermediate",
+      "is_primary": true,
+      "coaching_experience_years": null,
+      "certifications": null
+    },
+    {
+      "id": 17,
+      "user_id": 10,
+      "activity_name": "Gym",
+      "skill_level": "intermediate",
+      "is_primary": true,
+      "coaching_experience_years": null,
+      "certifications": null
+    },
+    {
+      "id": 18,
+      "user_id": 11,
+      "activity_name": "Cricket",
+      "skill_level": "advanced",
+      "is_primary": true,
+      "coaching_experience_years": null,
+      "certifications": null
+    }
+  ],
+  "interests": [
+    {
+      "id": 3,
+      "sender_id": 4,
+      "receiver_id": 6,
+      "status": "accepted",
+      "sent_at": "2025-06-30T13:50:00.000Z",
+      "responded_at": "2025-06-30T13:55:00.000Z"
+    },
+    {
+      "id": 4,
+      "sender_id": 10,
+      "receiver_id": 5,
+      "status": "pending",
+      "sent_at": "2025-07-01T11:36:51.887Z",
+      "responded_at": null
+    },
+    {
+      "id": 5,
+      "sender_id": 10,
+      "receiver_id": 4,
+      "status": "pending",
+      "sent_at": "2025-07-01T11:36:53.929Z",
+      "responded_at": null
+    },
+    {
+      "id": 6,
+      "sender_id": 10,
+      "receiver_id": 6,
+      "status": "pending",
+      "sent_at": "2025-07-01T11:36:57.462Z",
+      "responded_at": null
+    }
+  ],
+  "career_applications": [
+    {
+      "id": 1,
+      "name": "Ankitesh Kushwaha",
+      "email": "ankiteshiiita@gmail.com",
+      "phone": "09711239143",
+      "resume_url": "https.://bbsnhdnsnnnx.com",
+      "contribution_area": "Design & UX",
+      "submitted_at": "2025-07-01T12:35:14.739Z"
+    }
+  ],
+  "investor_inquiries": [
+    {
+      "id": 1,
+      "name": "Testing",
+      "business_email": "testing@gm.com",
+      "phone": "09711239143",
+      "submitted_at": "2025-07-01T12:34:29.447Z"
+    }
+  ],
+  "feed_items": [],
+  "feed_likes": [],
+  "sessions": [
+    {
+      "id": 1,
+      "user_id": null,
+      "phone_number": "9711239143",
+      "session_token": "972d25163f48c4b0223063ec9fa0e0c3a14c933bb677f82de4b0c00d43900230",
+      "session_type": "otp_verified",
+      "expires_at": "2025-07-02T11:34:33.748Z",
+      "created_at": "2025-07-01T11:34:33.767Z"
+    },
+    {
+      "id": 3,
+      "user_id": 10,
+      "phone_number": "9711239143",
+      "session_token": "5a01b46d9cc76b568401b3ceef096285481838f253f886abb00546bc7ecc9e8c",
+      "session_type": "profile_complete",
+      "expires_at": "2025-07-02T11:36:07.467Z",
+      "created_at": "2025-07-01T11:36:07.522Z"
+    },
+    {
+      "id": 4,
+      "user_id": 10,
+      "phone_number": "9711239143",
+      "session_token": "9fba1809293f509ede084022e81e236019b4edd2246679c6ae3193205eab3d28",
+      "session_type": "profile_complete",
+      "expires_at": "2025-07-02T11:36:39.449Z",
+      "created_at": "2025-07-01T11:36:39.475Z"
+    },
+    {
+      "id": 5,
+      "user_id": 10,
+      "phone_number": "9711239143",
+      "session_token": "0ff31d5e198e769f89dede4f472ed893fadcf6bfdeed6e6ae10a04ecca4008d1",
+      "session_type": "profile_complete",
+      "expires_at": "2025-07-02T12:06:53.443Z",
+      "created_at": "2025-07-01T12:06:53.462Z"
+    },
+    {
+      "id": 7,
+      "user_id": 11,
+      "phone_number": "9910880270",
+      "session_token": "8de565149028992b386123b43d191deaae076c4877ed4f7cbc4249b7471b92e4",
+      "session_type": "profile_complete",
+      "expires_at": "2025-07-02T17:23:45.174Z",
+      "created_at": "2025-07-01T17:23:45.225Z"
+    },
+    {
+      "id": 8,
+      "user_id": 11,
+      "phone_number": "9910880270",
+      "session_token": "fcca7ff00573f0e7f1433f95b26281ca06512c32bdcd31d8cde07afda38a954a",
+      "session_type": "profile_complete",
+      "expires_at": "2025-07-02T17:24:38.488Z",
+      "created_at": "2025-07-01T17:24:38.507Z"
+    }
+  ],
+  "exported_at": "2025-07-01T23:02:07.446Z",
+  "total_records": 25
+}

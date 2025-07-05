@@ -1,0 +1,316 @@
+{
+  "users": [
+    [
+      1,
+      {
+        "phoneNumber": "9643673900",
+        "name": "Navin Kumar",
+        "userType": "player",
+        "dateOfBirth": "1987-09-29",
+        "age": 37,
+        "workplace": "Infoedge",
+        "locationCoordinates": "",
+        "locationName": "Noida, UP",
+        "city": "Noida, UP",
+        "societyArea": "CGEWHO Kendriya Vihar",
+        "id": 1,
+        "email": null,
+        "bio": null,
+        "profilePhotoUrl": null,
+        "profileVisibility": "public",
+        "isActive": true,
+        "createdAt": "2025-06-30T11:25:11.574Z",
+        "updatedAt": "2025-06-30T11:25:11.574Z"
+      }
+    ],
+    [
+      2,
+      {
+        "phoneNumber": "8406863855",
+        "name": "Muskan Agrawal",
+        "email": "",
+        "userType": "player",
+        "dateOfBirth": "1999-09-02",
+        "age": 25,
+        "workplace": "StapuBox",
+        "bio": "",
+        "locationCoordinates": "28.7040592,77.10249019999999",
+        "locationName": "Saket, New Delhi, Delhi 110017, India",
+        "city": "Delhi, DL",
+        "societyArea": "Saket",
+        "id": 2,
+        "profilePhotoUrl": null,
+        "profileVisibility": "public",
+        "isActive": true,
+        "createdAt": "2025-06-30T12:34:16.837Z",
+        "updatedAt": "2025-06-30T12:34:16.837Z"
+      }
+    ],
+    [
+      3,
+      {
+        "phoneNumber": "9289302236",
+        "name": "Shubham Raj",
+        "email": "",
+        "userType": "coach",
+        "dateOfBirth": "1992-07-23",
+        "age": 32,
+        "workplace": "Infoedge",
+        "bio": "",
+        "locationCoordinates": "28.500195723832768,77.41501999484808",
+        "locationName": "Paras Tierea, Sector 137, Noida, Uttar Pradesh 201305, India",
+        "city": "Noida",
+        "societyArea": "Paras Tierea",
+        "id": 3,
+        "profilePhotoUrl": null,
+        "profileVisibility": "public",
+        "isActive": true,
+        "createdAt": "2025-06-30T13:45:53.643Z",
+        "updatedAt": "2025-06-30T13:45:53.643Z"
+      }
+    ],
+    [
+      4,
+      {
+        "phoneNumber": "7777777777",
+        "name": "New Test User",
+        "userType": "player",
+        "dateOfBirth": "1995-05-15",
+        "age": 29,
+        "workplace": "Test Company",
+        "locationCoordinates": "19.1136,72.8697",
+        "locationName": "Andheri, Mumbai, Maharashtra, India",
+        "city": "Mumbai",
+        "societyArea": "Andheri",
+        "id": 4,
+        "email": null,
+        "bio": null,
+        "profilePhotoUrl": null,
+        "profileVisibility": "public",
+        "isActive": true,
+        "createdAt": "2025-07-02T09:17:58.414Z",
+        "updatedAt": "2025-07-02T09:17:58.414Z"
+      }
+    ]
+  ],
+  "userActivities": [
+    [
+      1,
+      {
+        "userId": 1,
+        "activityName": "Cricket",
+        "skillLevel": "intermediate",
+        "isPrimary": false,
+        "id": 1,
+        "coachingExperienceYears": null,
+        "certifications": null
+      }
+    ],
+    [
+      2,
+      {
+        "userId": 1,
+        "activityName": "Badminton",
+        "skillLevel": "advanced",
+        "isPrimary": true,
+        "id": 2,
+        "coachingExperienceYears": null,
+        "certifications": null
+      }
+    ],
+    [
+      3,
+      {
+        "userId": 2,
+        "activityName": "Gym",
+        "skillLevel": "intermediate",
+        "isPrimary": true,
+        "id": 3,
+        "coachingExperienceYears": null,
+        "certifications": null
+      }
+    ],
+    [
+      4,
+      {
+        "userId": 2,
+        "activityName": "Running",
+        "skillLevel": "learner",
+        "isPrimary": false,
+        "id": 4,
+        "coachingExperienceYears": null,
+        "certifications": null
+      }
+    ],
+    [
+      5,
+      {
+        "userId": 3,
+        "activityName": "Gym",
+        "skillLevel": "intermediate",
+        "isPrimary": true,
+        "coachingExperienceYears": 2,
+        "certifications": "A+",
+        "id": 5
+      }
+    ],
+    [
+      6,
+      {
+        "userId": 4,
+        "activityName": "Football",
+        "skillLevel": "intermediate",
+        "isPrimary": true,
+        "id": 6,
+        "coachingExperienceYears": null,
+        "certifications": null
+      }
+    ]
+  ],
+  "interests": [
+    [
+      1,
+      {
+        "senderId": 1,
+        "receiverId": 3,
+        "status": "accepted",
+        "id": 1,
+        "createdAt": "2025-06-30T13:50:00.000Z",
+        "updatedAt": "2025-06-30T13:55:00.000Z"
+      }
+    ]
+  ],
+  "careerApplications": [
+    [
+      1,
+      {
+        "name": "Final Email Test",
+        "email": "final.test@example.com",
+        "phone": "9876543210",
+        "resumeUrl": null,
+        "contributionArea": "Technology Development",
+        "id": 1,
+        "submittedAt": "2025-06-30T13:33:22.725Z"
+      }
+    ]
+  ],
+  "investorInquiries": [],
+  "feedItems": [],
+  "feedLikes": [],
+  "sessions": [
+    [
+      1,
+      {
+        "phoneNumber": "9643673900",
+        "userId": 1,
+        "sessionToken": "navin-kumar-profile-complete",
+        "sessionType": "profile_complete",
+        "expiresAt": "2025-07-01T11:24:53.807Z",
+        "id": 1,
+        "createdAt": "2025-06-30T11:24:53.807Z"
+      }
+    ],
+    [
+      2,
+      {
+        "phoneNumber": "8406863855",
+        "userId": null,
+        "sessionToken": "c96b9c972cc85343f0d1d7c5d34960db87091015f89c0d398066814a7a8304b9",
+        "sessionType": "otp_verified",
+        "expiresAt": "2025-07-01T12:33:35.636Z",
+        "id": 2,
+        "createdAt": "2025-06-30T12:33:35.636Z"
+      }
+    ],
+    [
+      3,
+      {
+        "phoneNumber": "9289302236",
+        "userId": null,
+        "sessionToken": "9a55e6c6679fd404d84e2dd20daa58f3e21587f89cf1a0aa8791362d18523a08",
+        "sessionType": "otp_verified",
+        "expiresAt": "2025-07-01T13:43:15.785Z",
+        "id": 3,
+        "createdAt": "2025-06-30T13:43:15.785Z"
+      }
+    ],
+    [
+      4,
+      {
+        "phoneNumber": "7777777777",
+        "userId": null,
+        "sessionToken": "17d4e848014535b66e3c7284f3764ef503e9fedfa3940b0f280ef4d9793a3450",
+        "sessionType": "otp_verified",
+        "expiresAt": "2025-07-03T09:17:44.714Z",
+        "id": 4,
+        "createdAt": "2025-07-02T09:17:44.714Z"
+      }
+    ]
+  ],
+  "otpVerifications": [
+    [
+      1,
+      {
+        "phoneNumber": "9643673900",
+        "otp": "9301",
+        "expiresAt": "2025-06-30T11:34:46.909Z",
+        "verified": true,
+        "id": 1,
+        "createdAt": "2025-06-30T11:24:46.909Z"
+      }
+    ],
+    [
+      2,
+      {
+        "phoneNumber": "8406863855",
+        "otp": "2963",
+        "expiresAt": "2025-06-30T12:41:38.395Z",
+        "verified": false,
+        "id": 2,
+        "createdAt": "2025-06-30T12:31:38.395Z"
+      }
+    ],
+    [
+      3,
+      {
+        "phoneNumber": "8406863855",
+        "otp": "4397",
+        "expiresAt": "2025-06-30T12:42:51.869Z",
+        "verified": true,
+        "id": 3,
+        "createdAt": "2025-06-30T12:32:51.869Z"
+      }
+    ],
+    [
+      4,
+      {
+        "phoneNumber": "9289302236",
+        "otp": "6649",
+        "expiresAt": "2025-06-30T13:53:02.678Z",
+        "verified": true,
+        "id": 4,
+        "createdAt": "2025-06-30T13:43:02.678Z"
+      }
+    ],
+    [
+      5,
+      {
+        "phoneNumber": "7777777777",
+        "otp": "4880",
+        "expiresAt": "2025-07-02T09:27:39.775Z",
+        "verified": true,
+        "id": 5,
+        "createdAt": "2025-07-02T09:17:39.775Z"
+      }
+    ]
+  ],
+  "currentUserId": 5,
+  "currentUserActivityId": 7,
+  "currentInterestId": 1,
+  "currentCareerApplicationId": 2,
+  "currentInvestorInquiryId": 1,
+  "currentFeedItemId": 1,
+  "currentFeedLikeId": 1,
+  "currentSessionId": 5,
+  "currentOtpId": 6
+}

@@ -1,0 +1,70 @@
+🔧 Direct fix for TLS certificate error...
+[PM2] Applying action stopProcessId on app [all](ids: [ 0 ])
+[PM2] [stapubox](0) ✓
+┌────┬─────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name        │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼─────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ stapubox    │ default     │ 1.0.0   │ cluster │ 0        │ 0      │ 0    │ stopped   │ 0%       │ 0b       │ root     │ disabled │
+└────┴─────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+[PM2] Applying action deleteProcessId on app [all](ids: [ 0 ])
+[PM2] [stapubox](0) ✓
+┌────┬───────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name      │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+└────┴───────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+📅 dist/index.js last modified: 2025-07-03 23:49:22.057383403 +0000
+🧹 Clean build process...
+npm warn using --force Recommended protections disabled.
+
+up to date, audited 614 packages in 5s
+
+94 packages are looking for funding
+  run `npm fund` for details
+
+9 vulnerabilities (1 low, 8 moderate)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+🏗️ Building server only...
+
+  dist/index.js  94.3kb
+
+⚡ Done in 25ms
+✅ Server build successful
+✅ Built file uses correct PostgreSQL configuration
+🚀 Starting app...
+[PM2][WARN] Applications stapubox not running, starting...
+[PM2] App [stapubox] launched (1 instances)
+┌────┬─────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name        │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼─────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ stapubox    │ default     │ 1.0.0   │ cluster │ 73095    │ 0s     │ 0    │ online    │ 0%       │ 40.1mb   │ root     │ disabled │
+└────┴─────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+[TAILING] Tailing last 10 lines for [stapubox] process (change the value with --lines option)
+/root/.pm2/logs/stapubox-error-0.log last 10 lines:
+0|stapubox | You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+0|stapubox | Error: Could not find the build directory: /apps/stapubox-replit-app/dist/public, make sure to build the client first
+0|stapubox |     at serveStatic (file:///apps/stapubox-replit-app/dist/index.js:2227:11)
+0|stapubox |     at file:///apps/stapubox-replit-app/dist/index.js:2443:5
+0|stapubox | (node:73095) NOTE: The AWS SDK for JavaScript (v2) is in maintenance mode.
+0|stapubox |  SDK releases are limited to address critical bug fixes and security issues only.
+0|stapubox | 
+0|stapubox | Please migrate your code to use AWS SDK for JavaScript (v3).
+0|stapubox | For more information, check the blog post at https://a.co/cUPnyil
+0|stapubox | (Use `node --trace-warnings ...` to show where the warning was created)
+
+/root/.pm2/logs/stapubox-out-0.log last 10 lines:
+0|stapubox |       {
+0|stapubox |         "sid": 7030918,
+0|stapubox |         "buzz_id": 157,
+0|stapubox |         "sname": "cricket",
+0|stapubox |         "title": "Catch the Edgbaston Showdown Live: India vs England 2nd Test!",
+0|stapubox |         "summary": "The thrilling India vs England 2nd Test at Edgbaston is underway, promising intense cricket action. Fans can stream live and follow every ball, every run, and every wicket as the battle for series suprem...
+0|stapubox | 🔄 Duplicate news item found: https://www.news18.com/cricket/india-vs-england-live-streaming-watch-2nd-test-eng-ind-edgbaston-today-online-birmingham-9413962.html
+0|stapubox | 🛑 Duplicate found on page 1, stopping ingestion
+0|stapubox | 🎉 News ingestion completed in 0s. Total new articles: 0
+0|stapubox | 📈 Ingestion Summary: 0 new articles added to database

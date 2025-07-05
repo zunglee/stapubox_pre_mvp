@@ -1,0 +1,44 @@
+
+
+I want to consume the stapubuzz newsfeed 3rd paty api and insert into our own database. can u create me a cron to fetch a news detail from the same newsfeed api  and insert into ur own database. cron shoudl run in every 2 hours. each news is unique by the value "src_link". so when cron runs in loop. it hit the endpoint with inital value page =1 , then 2 , then 3. suppose in 3rd hit one gets the duplicate url, means url already exists. then cron should stop it. 
+
+method: GET
+newsfeed api: https://stapubox.com/buzz/digest/api
+paramters : "page" value is 1
+            "cnt" value is 30
+            "skey" value is iMBatman
+GET url should look like : https://stapubox.com/buzz/digest/api?page=1&cnt=50&src_utm=replit&skey=iMBatman
+
+API response : data inside the key "data" => "buzz_digest"
+{"status":"success","msg":"Data fetched successfully","err":null,"data":{"buzz_digest":[{"sid":7030805,"buzz_id":2,"sname":"chess","title":"a","summary":"b","src_name":"c","src_link":"https://timesofindia.indiatimes.com/life-style/spotlight/chess-prodigies-the-worlds-youngest-chess-phenoms-of-2025/articleshow/122144037.cms","img_src":"","favicon_src":"","publish_time":"2025-06-29T22:08:59","like_cnt":null,"dislike_cnt":null,"share_cnt":null,"view_cnt":null,"liked":false,"viewed":false},{"sid":7030805,"buzz_id":1,"sname":"f","title":"dfd","summary":"a","src_name":"dfdf","src_link":"https://timesofindia.indiatimes.com/sports/chess/drama-fide-slams-vladimir-kramniks-defamation-lawsuit-against-david-navara-brings-a-lot-of-harm-to-chess-community/articleshow/122143534.cms","img_src":"","favicon_src":"","publish_time":"2025-06-29T22:06:09","like_cnt":null,"dislike_cnt":null,"share_cnt":null,"view_cnt":null,"liked":false,"viewed":false}]}}
+
+
+Once data is ingested. create an api similar to current one , which fetch data from our database. this is , to switch between differrent sources.
+LoggedIn scenerio , capture the like and share count. 
+suggestion for table , u can create on ur own , also share the table structure.
+
+CREATE TABLE fieldbuzz_interactions (
+     id                   int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+     buzz_id            int(11) NOT NULL,        
+     user_id            int(11) DEFAULT NULL,
+     spectator_code       VARCHAR(64) DEFAULT NULL,    (non logged in case)
+      liked                BOOLEAN DEFAULT FALSE,    
+     disliked             BOOLEAN DEFAULT FALSE,
+     shared               BOOLEAN DEFAULT FALSE,
+     viewed               BOOLEAN DEFAULT FALSE,
+     liked_at             DATETIME DEFAULT NULL,
+     disliked_at          DATETIME DEFAULT NULL,
+     shared_at            DATETIME DEFAULT NULL,
+     viewd_at            DATETIME DEFAULT NULL,
+     update_ts            timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE NOW(),
+     entry_ts             timestamp DEFAULT CURRENT_TIMESTAMP,
+     INDEX idx_digest_id (`digest_id`),
+     INDEX idx_digest_player_id (`digest_id`,`player_id`),
+     INDEX idx_digest_spect_id (`digest_id`,`spectator_code`)
+);
+
+
+now if a logged in user like the post capture it , on next refresh of page , show the like button liked.
+capture the share activity against the user id and buzz_id
+
+ask me if you have any query before proceeding 

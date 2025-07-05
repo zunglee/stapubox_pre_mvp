@@ -1,0 +1,107 @@
+🔍 Checking current app status and fixing immediate issues...
+📋 Current PM2 Error Logs:
+[TAILING] Tailing last 5 lines for [stapubox] process (change the value with --lines option)
+/root/.pm2/logs/stapubox-error-0.log last 5 lines:
+0|stapubox |  SDK releases are limited to address critical bug fixes and security issues only.
+0|stapubox | 
+0|stapubox | Please migrate your code to use AWS SDK for JavaScript (v3).
+0|stapubox | For more information, check the blog post at https://a.co/cUPnyil
+0|stapubox | (Use `node --trace-warnings ...` to show where the warning was created)
+
+
+📋 Current PM2 Output Logs:
+[TAILING] Tailing last 5 lines for [stapubox] process (change the value with --lines option)
+/root/.pm2/logs/stapubox-out-0.log last 5 lines:
+0|stapubox |         "summary": "The thrilling India vs England 2nd Test at Edgbaston is underway, promising intense cricket action. Fans can stream live and follow every ball, every run, and every wicket as the battle for series suprem...
+0|stapubox | 2025-07-04T00:04:18: 🔄 Duplicate news item found: https://www.news18.com/cricket/india-vs-england-live-streaming-watch-2nd-test-eng-ind-edgbaston-today-online-birmingham-9413962.html
+0|stapubox | 2025-07-04T00:04:18: 🛑 Duplicate found on page 1, stopping ingestion
+0|stapubox | 2025-07-04T00:04:18: 🎉 News ingestion completed in 0s. Total new articles: 0
+0|stapubox | 2025-07-04T00:04:18: 📈 Ingestion Summary: 0 new articles added to database
+
+
+🔧 Checking if dist/public exists and has content:
+total 16
+drwxr-xr-x 3 root root 4096 Jul  4 00:04 .
+drwxr-xr-x 3 root root 4096 Jul  3 23:55 ..
+drwxr-xr-x 2 root root 4096 Jul  3 23:55 assets
+-rw-r--r-- 1 root root 2010 Jul  4 00:04 index.html
+
+🧪 Testing basic server startup...
+Starting test server...
+Test server running on port 3000
+🔍 Test server port check:
+tcp        0      0 0.0.0.0:3000            0.0.0.0:*               LISTEN      73644/node          
+✅ Basic Node.js server CAN listen on port 3000
+{"status":"ok","port":"3000"}
+🔧 The issue is in the main application. Let's check for static file serving errors...
+Static file check:
+dist/public exists: YES
+index.html exists: YES
+index.html size: 2010 bytes
+
+🔄 Restarting PM2 one more time...
+Use --update-env to update environment variables
+[PM2] Applying action restartProcessId on app [stapubox](ids: [ 0 ])
+[PM2] [stapubox](0) ✓
+┌────┬─────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name        │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼─────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ stapubox    │ default     │ 1.0.0   │ cluster │ 73674    │ 0s     │ 1    │ online    │ 0%       │ 40.3mb   │ root     │ disabled │
+└────┴─────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+Port check after restart:
+root@srv837052:/apps/stapubox-replit-app# 
+root@srv837052:/apps/stapubox-replit-app# 
+root@srv837052:/apps/stapubox-replit-app# 
+root@srv837052:/apps/stapubox-replit-app# 
+root@srv837052:/apps/stapubox-replit-app# curl http://localhost:3000
+curl: (7) Failed to connect to localhost port 3000 after 0 ms: Couldn't connect to server
+root@srv837052:/apps/stapubox-replit-app# 
+root@srv837052:/apps/stapubox-replit-app# vi final-fix.sh
+root@srv837052:/apps/stapubox-replit-app# ./final-fix.sh
+🔧 Fixing port binding issue in the main application...
+[PM2] Applying action stopProcessId on app [stapubox](ids: [ 0 ])
+[PM2] [stapubox](0) ✓
+┌────┬─────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name        │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼─────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ stapubox    │ default     │ 1.0.0   │ cluster │ 0        │ 0      │ 1    │ stopped   │ 0%       │ 0b       │ root     │ disabled │
+└────┴─────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+🔍 Examining server startup code...
+2446:  server.listen({
+🔧 Creating port binding patch...
+✅ Server patched successfully
+🚀 Starting patched server...
+[PM2] Applying action restartProcessId on app [stapubox](ids: [ 0 ])
+[PM2] [stapubox](0) ✓
+┌────┬─────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name        │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼─────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ stapubox    │ default     │ 1.0.0   │ cluster │ 73745    │ 0s     │ 1    │ online    │ 0%       │ 40.3mb   │ root     │ disabled │
+└────┴─────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+📊 PM2 Status:
+┌────┬─────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name        │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼─────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ stapubox    │ default     │ 1.0.0   │ cluster │ 73745    │ 5s     │ 1    │ online    │ 0%       │ 135.3mb  │ root     │ disabled │
+└────┴─────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+🔍 Port check:
+🧪 Connection test:
+📋 Recent logs:
+[TAILING] Tailing last 3 lines for [stapubox] process (change the value with --lines option)
+/root/.pm2/logs/stapubox-error-0.log last 3 lines:
+0|stapubox | Please migrate your code to use AWS SDK for JavaScript (v3).
+0|stapubox | For more information, check the blog post at https://a.co/cUPnyil
+0|stapubox | (Use `node --trace-warnings ...` to show where the warning was created)
+
+/root/.pm2/logs/stapubox-out-0.log last 3 lines:
+0|stapubox | 2025-07-04T00:08:32: 🛑 Duplicate found on page 1, stopping ingestion
+0|stapubox | 2025-07-04T00:08:32: 🎉 News ingestion completed in 0s. Total new articles: 0
+0|stapubox | 2025-07-04T00:08:32: 📈 Ingestion Summary: 0 new articles added to database
+
+✅ Port binding fix completed!
+root@srv837052:/apps/stapubox-replit-app# 
+root@srv837052:/apps/stapubox-replit-app# 
+root@srv837052:/apps/stapubox-replit-app# 
+root@srv837052:/apps/stapubox-replit-app# curl http://localhost:3000
+curl: (7) Failed to connect to localhost port 3000 after 0 ms: Couldn't connect to server
+root@srv837052:/apps/stapubox-replit-app# 

@@ -1,0 +1,34 @@
+0|stapubox  |   [Symbol(kType)]: 'error',
+0|stapubox  |   [Symbol(kError)]: Error [ERR_TLS_CERT_ALTNAME_INVALID]: Hostname/IP does not match certificate's altnames: Host: localhost. is not in the cert's altnames: DNS:stapubox.com, DNS:www.stapubox.com
+0|stapubox  |       at Object.checkServerIdentity (node:tls:316:12)
+0|stapubox  |       at TLSSocket.onConnectSecure (node:_tls_wrap:1687:27)
+0|stapubox  |       at TLSSocket.emit (node:events:524:28)
+0|stapubox  |       at TLSSocket.emit (node:domain:489:12)
+0|stapubox  |       at TLSSocket._finishInit (node:_tls_wrap:1076:8)
+0|stapubox  |       at ssl.onhandshakedone (node:_tls_wrap:862:12) {
+0|stapubox  |     code: 'ERR_TLS_CERT_ALTNAME_INVALID',
+0|stapubox  |     reason: "Host: localhost. is not in the cert's altnames: DNS:stapubox.com, DNS:www.stapubox.com",
+0|stapubox  |     host: 'localhost',
+0|stapubox  |     cert: {
+0|stapubox  |       subject: [Object: null prototype],
+0|stapubox  |       issuer: [Object: null prototype],
+0|stapubox  |       subjectaltname: 'DNS:stapubox.com, DNS:www.stapubox.com',
+0|stapubox  |       infoAccess: [Object: null prototype],
+0|stapubox  |       ca: false,
+0|stapubox  |       bits: 256,
+0|stapubox  |       pubkey: <Buffer 04 08 f4 4e d0 a2 40 35 f3 e2 21 3b e5 95 28 16 fb ed ce a3 3f e9 94 46 b4 f3 66 b9 77 16 a3 05 62 c8 57 b9 32 40 12 a7 9c 48 2d d1 ec 90 13 cd 70 33 ... 15 more bytes>,
+0|stapubox  |       asn1Curve: 'prime256v1',
+0|stapubox  |       nistCurve: 'P-256',
+0|stapubox  |       valid_from: 'May 22 17:46:57 2025 GMT',
+0|stapubox  |       valid_to: 'Aug 20 17:46:56 2025 GMT',
+0|stapubox  |       fingerprint: 'F9:97:10:B8:FB:C5:D2:A8:AF:BC:72:A6:75:42:54:00:E5:03:D9:97',
+0|stapubox  |       fingerprint256: '85:BF:FC:FF:68:7E:AC:03:BA:E8:6B:04:C0:9A:7C:E0:DF:B3:71:92:ED:12:1C:D6:8A:60:3C:46:02:04:5E:37',
+0|stapubox  |       fingerprint512: '5D:01:58:6F:AD:B9:99:73:77:C8:B2:E3:1A:E8:81:B0:B3:C4:F5:5A:5E:F7:0B:15:DD:FD:60:FF:F7:DC:9F:38:2F:A9:C6:7D:75:3E:BB:87:2A:BF:7F:51:DC:6F:48:7B:35:FB:34:D8:E7:84:F9:56:3D:95:45:F9:44:D5:9F:74',
+0|stapubox  |       ext_key_usage: [Array],
+0|stapubox  |       serialNumber: '05A1CFCD864D64582C773E71EA35DC12094A',
+0|stapubox  |       raw: <Buffer 30 82 03 97 30 82 03 1c a0 03 02 01 02 02 12 05 a1 cf cd 86 4d 64 58 2c 77 3e 71 ea 35 dc 12 09 4a 30 0a 06 08 2a 86 48 ce 3d 04 03 03 30 32 31 0b 30 ... 873 more bytes>,
+0|stapubox  |       issuerCertificate: [Object]
+0|stapubox  |     }
+0|stapubox  |   },
+0|stapubox  |   [Symbol(kMessage)]: "Hostname/IP does not match certificate's altnames: Host: localhost. is not in the cert's altnames: DNS:stapubox.com, DNS:www.stapubox.com"
+0|stapubox  | }

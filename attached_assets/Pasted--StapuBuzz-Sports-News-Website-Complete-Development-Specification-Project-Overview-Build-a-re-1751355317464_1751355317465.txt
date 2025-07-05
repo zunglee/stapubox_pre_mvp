@@ -1,0 +1,862 @@
+# StapuBuzz Sports News Website - Complete Development Specification
+
+## Project Overview
+Build a responsive, mobile-first sports news aggregation website that displays news from multiple sports with infinite scrolling, user interactions (like/share), and a clean, sporty design similar to Medium.com's simplicity but with sports theming.
+
+## Technical Stack
+- **Frontend**: HTML5, CSS3, JavaScript (jQuery 3.7.0+), Bootstrap 5.3.0+
+- **Icons**: Font Awesome 6.4.0+
+- **Design Approach**: Mobile-first responsive design
+- **API Integration**: RESTful API calls with custom authentication
+- **Browser Support**: Chrome 90+, Firefox 90+, Safari 14+, Mobile browsers
+
+## Complete API Configuration
+
+### Base Configuration
+```javascript
+const CONFIG = {
+    baseEndpoint: 'https://stapubox.com/buzz/digest/api',
+    likeEndpoint: 'https://stapubox.com/buzz/digest/api/like', 
+    shareEndpoint: 'https://stapubox.com/buzz/digest/api/share',
+    apiKey: '702c7a2e-234f-4bce-9a61-fda0bc7e6d1a',
+    cookieName: 'stapu_p',
+    itemsPerPage: 10
+};
+```
+
+### Complete Sports Database
+```javascript
+const ALL_SPORTS = [
+    {id: 7011808, name: 'archery'},
+    {id: 7020104, name: 'badminton'},
+    {id: 7020111, name: 'basketball'},
+    {id: 7021524, name: 'boxing'},
+    {id: 7030805, name: 'chess'},
+    {id: 7030918, name: 'cricket'},
+    {id: 7032525, name: 'cycling'},
+    {id: 7040913, name: 'discus throw'},
+    {id: 7060514, name: 'fencing'},
+    {id: 7061515, name: 'football'},
+    {id: 7071215, name: 'golf'},
+    {id: 7071325, name: 'gymnastics'},
+    {id: 7080113, name: 'hammer throw'},
+    {id: 7080917, name: 'high jump'},
+    {id: 7080315, name: 'hockey'},
+    {id: 7100122, name: 'javelin throw'},
+    {id: 7102115, name: 'judo'},
+    {id: 7110102, name: 'kabaddi'},
+    {id: 7110815, name: 'kho-kho'},
+    {id: 7121514, name: 'long jump'},
+    {id: 7122115, name: 'ludo'},
+    {id: 7130118, name: 'marathon'},
+    {id: 7131801, name: 'martial arts - karate'},
+    {id: 7160913, name: 'pickleball'},
+    {id: 7161215, name: 'polo'},
+    {id: 7181321, name: 'running'},
+    {id: 7190112, name: 'sailing'},
+    {id: 7190815, name: 'shooting'},
+    {id: 7191508, name: 'shot put'},
+    {id: 7191111, name: 'skating'},
+    {id: 7191711, name: 'squash'},
+    {id: 7192118, name: 'surfing'},
+    {id: 7192313, name: 'swimming'},
+    {id: 7200122, name: 'table tennis'},
+    {id: 7200511, name: 'taekwondo'},
+    {id: 7200514, name: 'tennis'},
+    {id: 7200815, name: 'throwball'},
+    {id: 7201816, name: 'triple jump'},
+    {id: 7221512, name: 'volleyball'},
+    {id: 7230519, name: 'weightlifting'},
+    {id: 7231805, name: 'wrestling'}
+];
+
+const PRIMARY_SPORTS = ['badminton', 'cricket'];
+const SPORTS_COVERING = ['chess', 'cricket', 'football', 'badminton', 'squash', 'table tennis', 'volleyball', 'judo', 'kabaddi'];
+```
+
+### Complete Sports Icons Mapping
+```javascript
+const SPORTS_ICONS = {
+    'archery': 'fas fa-bullseye',
+    'badminton': 'fas fa-shuttlecock',
+    'basketball': 'fas fa-basketball-ball',
+    'boxing': 'fas fa-fist-raised',
+    'chess': 'fas fa-chess',
+    'cricket': 'fas fa-baseball-ball',
+    'cycling': 'fas fa-bicycle',
+    'discus throw': 'fas fa-compact-disc',
+    'fencing': 'fas fa-sword',
+    'football': 'fas fa-football-ball',
+    'golf': 'fas fa-golf-ball',
+    'gymnastics': 'fas fa-dumbbell',
+    'hammer throw': 'fas fa-hammer',
+    'high jump': 'fas fa-arrow-up',
+    'hockey': 'fas fa-hockey-puck',
+    'javelin throw': 'fas fa-location-arrow',
+    'judo': 'fas fa-fist-raised',
+    'kabaddi': 'fas fa-users',
+    'kho-kho': 'fas fa-running',
+    'long jump': 'fas fa-long-arrow-alt-right',
+    'ludo': 'fas fa-dice',
+    'marathon': 'fas fa-running',
+    'martial arts - karate': 'fas fa-fist-raised',
+    'pickleball': 'fas fa-table-tennis',
+    'polo': 'fas fa-horse',
+    'running': 'fas fa-running',
+    'sailing': 'fas fa-sailboat',
+    'shooting': 'fas fa-crosshairs',
+    'shot put': 'fas fa-circle',
+    'skating': 'fas fa-skating',
+    'squash': 'fas fa-table-tennis',
+    'surfing': 'fas fa-water',
+    'swimming': 'fas fa-swimmer',
+    'table tennis': 'fas fa-table-tennis',
+    'taekwondo': 'fas fa-fist-raised',
+    'tennis': 'fas fa-table-tennis',
+    'throwball': 'fas fa-volleyball-ball',
+    'triple jump': 'fas fa-arrows-alt-h',
+    'volleyball': 'fas fa-volleyball-ball',
+    'weightlifting': 'fas fa-dumbbell',
+    'wrestling': 'fas fa-fist-raised',
+    'default': 'fas fa-trophy'
+};
+```
+
+## Design System & Theme
+
+### Color Palette
+```css
+:root {
+    --primary-color: #E17827;     /* Orange - main brand color */
+    --secondary-color: #00B0F0;   /* Blue - accent color */
+    --light-gray: #f8f9fa;        /* Background color */
+    --dark-gray: #6c757d;         /* Text secondary */
+    --white: #ffffff;             /* Background white */
+    --black: #333333;             /* Text primary */
+    --success: #28a745;           /* Success states */
+    --danger: #dc3545;            /* Error states */
+    --warning: #ffc107;           /* Warning states */
+}
+```
+
+### Typography
+```css
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--black);
+}
+
+.news-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.news-summary {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--dark-gray);
+}
+```
+
+### Image Specifications
+- **Target Size**: 92×92 pixels for optimal performance
+- **Format**: JPG preferred, PNG acceptable
+- **Bit Depth**: 8-bit
+- **Max File Size**: ~3KB for fast loading
+- **Aspect Ratio**: Maintain original, crop if necessary
+
+## Complete Page Structure
+
+### 1. HTML Document Structure
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StapuBuzz - Sports News</title>
+    <!-- CDN Links -->
+</head>
+<body>
+    <header class="header"><!-- Navigation --></header>
+    <div class="news-strip"><!-- Moving ticker --></div>
+    <div class="sports-tabs"><!-- Sports selection --></div>
+    <div class="main-content">
+        <aside class="sidebar"><!-- Quick buzz --></aside>
+        <main class="content-area"><!-- News cards --></main>
+    </div>
+</body>
+</html>
+```
+
+### 2. Header Navigation Component
+**Requirements:**
+- **Background**: Linear gradient from primary to secondary color
+- **Position**: Sticky/fixed at top with z-index: 1000
+- **Height**: Auto with 10px padding
+- **Shadow**: 0 2px 10px rgba(0,0,0,0.1)
+
+**Left Side Navigation:**
+- Logo: "StapuBuzz" with trophy icon (fas fa-trophy)
+- Home link with home icon (fas fa-home)
+- Groups link with users icon (fas fa-users)
+- Sports link with football icon (fas fa-futbol)
+
+**Right Side Navigation:**
+- Profile link with user circle icon (fas fa-user-circle)
+- Settings link with cog icon (fas fa-cog)
+
+**Responsive Behavior:**
+- Mobile: Collapse to hamburger menu
+- Desktop: Full horizontal navigation
+
+### 3. Moving News Strip Component
+**Specifications:**
+- **Background**: Linear gradient 90deg from secondary to primary color
+- **Height**: 40px fixed
+- **Text Color**: White
+- **Animation**: Continuous horizontal scroll, 30s duration
+- **Content**: Latest news headlines with sport icons
+
+**Animation CSS:**
+```css
+@keyframes scroll-left {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+```
+
+**Content Structure:**
+- Each news item: Icon + headline
+- Icon color: Gold (#ffd700)
+- Spacing: 50px between items
+- Text: White, medium weight
+
+### 4. Sports Selection Tabs Component
+**Layout:**
+- **Background**: Light gray (#f8f9fa)
+- **Padding**: 15px vertical
+- **Border**: 1px solid #dee2e6 at bottom
+
+**Sports Chips:**
+- **Default State**: White background, primary color border and text
+- **Active State**: Primary color background, white text
+- **Hover**: Primary background, white text, translateY(-2px)
+- **Padding**: 8px horizontal, 16px vertical
+- **Border Radius**: 25px (pill shape)
+- **Font Weight**: 500
+
+**Add Sport Dropdown:**
+- **Trigger**: Chip with plus icon and "Add Sport" text
+- **Search Input**: Full width, 25px border radius, primary color focus
+- **Dropdown Items**: Hover with light gray background
+- **Max Height**: 300px with scroll
+
+**Multi-select Behavior:**
+- Add sports as new chips
+- Remove sports with × button on chip
+- No maximum limit
+- Automatically refresh news on change
+
+### 5. Main Content Layout
+**Desktop Layout (>768px):**
+```css
+.main-content {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.sidebar {
+    width: 280px;
+    position: sticky;
+    top: 120px;
+}
+
+.content-area {
+    flex: 1;
+}
+```
+
+**Mobile Layout (≤768px):**
+```css
+.main-content {
+    flex-direction: column;
+    padding: 10px;
+}
+
+.sidebar {
+    width: 100%;
+    order: -1;
+    position: static;
+}
+```
+
+### 6. News Cards Component
+**Card Structure:**
+- **Background**: White
+- **Border Radius**: 12px
+- **Margin Bottom**: 20px
+- **Box Shadow**: 0 4px 12px rgba(0,0,0,0.1)
+- **Hover Effect**: translateY(-5px), enhanced shadow
+
+**Image Section:**
+- **Dimensions**: 100% width × 200px height
+- **Object Fit**: Cover
+- **Fallback**: Sports-themed placeholder with gradient background
+
+**Content Section:**
+- **Padding**: 20px
+- **Title**: 1.2rem, weight 600, color #333, margin-bottom 10px
+- **Summary**: 1rem, color #6c757d, margin-bottom 15px, line-height 1.5
+- **Meta Info**: Flex justify-between, sport tag + timestamp
+
+**Sport Tag:**
+- **Background**: Secondary color
+- **Color**: White
+- **Padding**: 4px 12px
+- **Border Radius**: 15px
+- **Font Size**: 0.8rem, weight 500
+
+**Action Buttons:**
+- **Layout**: Flex justify-between, border-top 1px #eee
+- **Buttons**: No background, flex align-center, gap 5px
+- **Hover**: Light gray background, primary color text
+- **Like Animation**: Scale 1 → 1.2 → 1 over 0.3s
+
+### 7. Sidebar - Quick Buzz Component
+**Container:**
+- **Width**: 280px fixed
+- **Background**: Light gray
+- **Border Radius**: 12px
+- **Padding**: 20px
+- **Position**: Sticky top 120px
+
+**Title:**
+- **Text**: "Quick Buzz"
+- **Font Size**: 1.1rem, weight 600
+- **Color**: Primary color
+- **Margin Bottom**: 15px
+
+**Quick Buzz Items:**
+- **Background**: White
+- **Border Radius**: 8px
+- **Margin Bottom**: 12px
+- **Image Height**: 120px
+- **Hover Effect**: translateX(5px)
+
+**Image Overlay:**
+- **Position**: Absolute bottom
+- **Background**: Linear gradient transparent to rgba(0,0,0,0.8)
+- **Text**: White, 0.9rem, weight 500
+- **Padding**: 15px 10px 10px
+
+## Complete API Integration Specifications
+
+### 1. News Fetch API (GET)
+**Endpoint:** `https://stapubox.com/buzz/digest/api`
+
+**Headers:**
+```javascript
+{
+    'Content-Type': 'application/json',
+    'stapu_key': '702c7a2e-234f-4bce-9a61-fda0bc7e6d1a'
+}
+```
+
+**Query Parameters:**
+- `sids`: Comma-separated sport IDs (e.g., "7020104,7020111,7030805")
+- `page`: Page number (integer, starts from 1)
+- `cnt`: Items per page (integer, recommended: 10)
+
+**Example Request:**
+```
+GET https://stapubox.com/buzz/digest/api?sids=7020104,7020111&page=1&cnt=10
+```
+
+**Complete Response Structure:**
+```json
+{
+    "status": "success",
+    "msg": "Data fetched successfully",
+    "err": null,
+    "data": {
+        "buzz_digest": [
+            {
+                "sid": 7030805,
+                "buzz_id": 2,
+                "sname": "chess",
+                "title": "Chess Championship Finals Begin Tomorrow",
+                "summary": "The world championship finals are set to begin with exciting matches between top grandmasters.",
+                "src_name": "Chess Weekly",
+                "src_link": "https://example.com/chess-news",
+                "img_src": "https://example.com/image.jpg",
+                "favicon_src": "https://example.com/favicon.ico",
+                "publish_time": "2025-06-29T22:08:59",
+                "like_cnt": 15,
+                "dislike_cnt": 2,
+                "share_cnt": 8,
+                "view_cnt": 150,
+                "liked": false,
+                "viewed": false
+            }
+        ]
+    }
+}
+```
+
+### 2. Like Action API (POST)
+**Endpoint:** `https://stapubox.com/buzz/digest/api/like`
+
+**Headers:**
+```javascript
+{
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'stapu_key': '702c7a2e-234f-4bce-9a61-fda0bc7e6d1a'
+}
+```
+
+**POST Data:**
+```javascript
+{
+    buzz_id: 2,                    // Integer - news item ID
+    action: 'like',                // String - always 'like'
+    stapu_p: 'user_session_id'     // String - from cookie
+}
+```
+
+**Response:**
+```json
+{
+    "status": "success",
+    "msg": "Like action recorded",
+    "data": {
+        "liked": true,
+        "like_count": 16
+    }
+}
+```
+
+### 3. Share Action API (POST)
+**Endpoint:** `https://stapubox.com/buzz/digest/api/share`
+
+**Headers:**
+```javascript
+{
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'stapu_key': '702c7a2e-234f-4bce-9a61-fda0bc7e6d1a'
+}
+```
+
+**POST Data:**
+```javascript
+{
+    buzz_id: 2,                    // Integer - news item ID
+    stapu_p: 'user_session_id'     // String - from cookie
+}
+```
+
+**Response:**
+```json
+{
+    "status": "success",
+    "msg": "Share action recorded",
+    "data": {
+        "share_count": 9
+    }
+}
+```
+
+## Cookie Management System
+
+### Cookie Configuration
+**Cookie Name:** `stapu_p`
+**Purpose:** Track user sessions for like/share functionality
+**Duration:** 30 days
+**Scope:** Domain-wide
+
+### Implementation:
+```javascript
+// Generate user ID if cookie doesn't exist
+function initializeCookie() {
+    if (!getCookie('stapu_p')) {
+        const userId = 'user_' + Math.random().toString(36).substr(2, 9);
+        setCookie('stapu_p', userId, 30);
+    }
+}
+
+// Cookie utility functions
+function setCookie(name, value, days) {
+    const date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    document.cookie = `${name}=${value}; expires=${date.toUTCString()}; path=/`;
+}
+
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return null;
+}
+```
+
+## Image Handling & Placeholders
+
+### Image Loading Strategy
+1. **Primary**: Load image from `img_src` field
+2. **Fallback**: Show sports-specific placeholder if `img_src` is empty
+3. **Error Handling**: Replace broken images with placeholder
+
+### Placeholder Design
+```css
+.placeholder-image {
+    width: 100%;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    font-size: 2rem;
+}
+```
+
+### Implementation:
+```javascript
+function createImageElement(imgSrc, sportName) {
+    if (imgSrc && imgSrc.trim() !== '') {
+        return `<img src="${imgSrc}" alt="${sportName}" class="news-image" 
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="placeholder-image" style="display:none;">
+                    <i class="${getSportIcon(sportName)}"></i>
+                </div>`;
+    } else {
+        return `<div class="placeholder-image">
+                    <i class="${getSportIcon(sportName)}"></i>
+                </div>`;
+    }
+}
+```
+
+## Infinite Scrolling Implementation
+
+### Scroll Detection
+```javascript
+function initializeInfiniteScroll() {
+    let scrollTimeout;
+    
+    $(window).scroll(function() {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(function() {
+            const scrollTop = $(window).scrollTop();
+            const windowHeight = $(window).height();
+            const documentHeight = $(document).height();
+            const scrollPercentage = (scrollTop + windowHeight) / documentHeight;
+            
+            // Load more when 50% scrolled
+            if (scrollPercentage >= 0.5 && !isLoading) {
+                fetchMoreNews();
+            }
+        }, 100);
+    });
+}
+```
+
+### Loading States
+```javascript
+function showLoader() {
+    $('#loader').html(`
+        <div class="sports-loader"></div>
+        <p style="margin-top: 15px; color: var(--dark-gray);">Loading more sports news...</p>
+    `).show();
+}
+
+function hideLoader() {
+    $('#loader').hide();
+}
+```
+
+## Animation Specifications
+
+### Like Button Animation
+```css
+@keyframes likeAnimation {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2) rotate(5deg); }
+    100% { transform: scale(1) rotate(0deg); }
+}
+
+.like-animation {
+    animation: likeAnimation 0.4s ease-in-out;
+}
+```
+
+### Card Hover Effects
+```css
+.news-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+```
+
+### Moving News Strip
+```css
+.news-strip-content {
+    animation: scroll-left 30s linear infinite;
+    white-space: nowrap;
+}
+
+@keyframes scroll-left {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+```
+
+## Responsive Design Breakpoints
+
+### Mobile First Approach
+```css
+/* Base styles for mobile (320px+) */
+.news-card {
+    margin-bottom: 15px;
+}
+
+.news-content {
+    padding: 15px;
+}
+
+/* Tablet (768px+) */
+@media (min-width: 768px) {
+    .main-content {
+        flex-direction: row;
+    }
+    
+    .sidebar {
+        width: 280px;
+        position: sticky;
+    }
+}
+
+/* Desktop (1024px+) */
+@media (min-width: 1024px) {
+    .main-content {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    
+    .news-card {
+        margin-bottom: 20px;
+    }
+}
+
+/* Large Desktop (1440px+) */
+@media (min-width: 1440px) {
+    .content-area {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 20px;
+    }
+}
+```
+
+## Loading Performance Optimizations
+
+### Image Optimization
+```javascript
+// Lazy loading implementation
+function implementLazyLoading() {
+    if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.src = img.dataset.src;
+                    img.classList.remove('lazy');
+                    observer.unobserve(img);
+                }
+            });
+        });
+        
+        document.querySelectorAll('img[data-src]').forEach(img => {
+            imageObserver.observe(img);
+        });
+    }
+}
+```
+
+### API Request Optimization
+```javascript
+// Debounced API calls
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+const debouncedFetchNews = debounce(fetchNews, 300);
+```
+
+## Error Handling & Fallbacks
+
+### Network Error Handling
+```javascript
+function handleApiError(xhr, status, error) {
+    console.error('API Error:', error);
+    
+    const errorMessage = xhr.status === 0 ? 
+        'Network connection failed. Please check your internet connection.' :
+        `Server error (${xhr.status}): ${xhr.statusText}`;
+    
+    showErrorMessage(errorMessage);
+}
+
+function showErrorMessage(message) {
+    const errorHtml = `
+        <div class="error-container">
+            <div class="error-icon"><i class="fas fa-exclamation-triangle"></i></div>
+            <h3>Oops! Something went wrong</h3>
+            <p>${message}</p>
+            <button onclick="retryLastRequest()" class="retry-btn">
+                <i class="fas fa-refresh"></i> Try Again
+            </button>
+        </div>
+    `;
+    
+    $('#newsContainer').html(errorHtml);
+}
+```
+
+### Offline Detection
+```javascript
+function handleOfflineMode() {
+    window.addEventListener('online', () => {
+        showNotification('Connection restored! Refreshing content...', 'success');
+        setTimeout(() => location.reload(), 1500);
+    });
+    
+    window.addEventListener('offline', () => {
+        showNotification('You are offline. Some features may not work.', 'warning');
+    });
+}
+```
+
+## File Structure & Organization
+
+```
+stapubuzz-website/
+├── index.html
+├── css/
+│   ├── main.css
+│   ├── components.css
+│   └── responsive.css
+├── js/
+│   ├── config.js          # API endpoints and constants
+│   ├── sports-data.js     # Sports arrays and icons
+│   ├── api.js            # API interaction functions
+│   ├── ui-components.js  # UI rendering functions
+│   ├── utils.js          # Utility functions
+│   └── main.js           # Main application logic
+├── images/
+│   └── placeholders/     # Sport placeholder icons
+└── README.md
+```
+
+## Testing Requirements
+
+### Functional Testing Checklist
+- [ ] News loads correctly with valid sport IDs
+- [ ] Like button toggles state and updates count
+- [ ] Share button increments count and triggers API
+- [ ] Infinite scroll loads more content at 50% scroll
+- [ ] Sports selection adds/removes chips correctly
+- [ ] Search in sports dropdown filters results
+- [ ] Moving news strip displays and animates
+- [ ] Quick buzz sidebar shows other sports news
+- [ ] Responsive design works on all screen sizes
+
+### Performance Testing
+- [ ] Page loads within 3 seconds on 3G connection
+- [ ] Images under 3KB load quickly
+- [ ] Animations run smoothly at 60fps
+- [ ] API calls complete within 5 seconds
+- [ ] Memory usage stays under 100MB
+
+### Browser Compatibility Testing
+- [ ] Chrome 90+ (Desktop & Mobile)
+- [ ] Firefox 90+ (Desktop & Mobile)
+- [ ] Safari 14+ (Desktop & Mobile)
+- [ ] Edge 90+
+- [ ] iOS Safari 14+
+- [ ] Android Chrome 90+
+
+## Deployment Configuration
+
+### CDN Resources
+```html
+<!-- Bootstrap CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Font Awesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+<!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+
+<!-- Bootstrap JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+```
+
+### Environment Variables
+```javascript
+const ENV = {
+    PRODUCTION: {
+        API_BASE: 'https://stapubox.com',
+        DEBUG: false
+    },
+    DEVELOPMENT: {
+        API_BASE: 'http://localhost:3000',
+        DEBUG: true
+    }
+};
+```
+
+## Security Considerations
+
+### Input Sanitization
+```javascript
+function sanitizeInput(input) {
+    const div = document.createElement('div');
+    div.textContent = input;
+    return div.innerHTML;
+}
+```
+
+### API Key Protection
+- Store API key in configuration
+- Implement rate limiting on client side
+- Monitor for unusual usage patterns
+
+### Cookie Security
+```javascript
+function setSecureCookie(name, value, days) {
+    const date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    document.cookie = `${name}=${value}; expires=${date.toUTCString()}; path=/; secure; samesite=strict`;
+}
+```
+
+---
+
+This complete specification document contains everything needed to build the StapuBuzz sports news website. No external references are required - all data, configurations, and specifications are included within this document.

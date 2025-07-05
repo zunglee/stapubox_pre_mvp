@@ -1,0 +1,29 @@
+{
+  "name": "stapubox-mysql-gateway",
+  "version": "1.0.0",
+  "description": "HTTP API Gateway for StapuBox MySQL database access",
+  "main": "mysql-api-gateway.js",
+  "scripts": {
+    "start": "node mysql-api-gateway.js",
+    "dev": "nodemon mysql-api-gateway.js",
+    "test": "node test-gateway.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "mysql",
+    "api",
+    "gateway",
+    "stapubox"
+  ],
+  "author": "StapuBox Team",
+  "license": "MIT"
+}

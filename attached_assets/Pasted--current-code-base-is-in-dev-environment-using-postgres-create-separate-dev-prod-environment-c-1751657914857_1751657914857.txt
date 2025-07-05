@@ -1,0 +1,209 @@
+
+current code base is in dev environment & using postgres , create separate dev & prod environment config or property file. implementing all current configuration in dev file.
+configuration should include atleast these 
+base url 
+port 
+database   
+
+I have my production server with ubuntu installed , & have nginx.I need to deploy my this code under domain name stapubox.com. 
+I have postgres installed with below configuration
+
+PGHOST=localhost
+PGPORT=5432
+PGUSER=stapubox_user
+PGPASSWORD=npg_dwAQM3ULCKs5
+PGDATABASE=stapubox_db
+
+& below steps have been followed
+
+sudo -u postgres psql
+# In PostgreSQL prompt, run these commands:
+CREATE DATABASE stapubox_db;
+CREATE USER stapubox_user WITH ENCRYPTED PASSWORD 'npg_dwAQM3ULCKs5';
+GRANT ALL PRIVILEGES ON DATABASE stapubox_db TO stapubox_user;
+# Connect to the new database to set schema permissions
+\c stapubox_db
+# Grant schema permissions
+GRANT ALL ON SCHEMA public TO stapubox_user;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO stapubox_user;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO stapubox_user;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO stapubox_user;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO stapubox_user;
+
+
+Production server configuration values 
+# In the .env file, set these values:
+NODE_ENV=production
+PORT=3000
+DATABASE_URL=postgresql://stapubox_user:npg_dwAQM3ULCKs5@localhost:5432/stapubox_db
+# Database connection details (for PostgreSQL)
+PGHOST=localhost
+PGPORT=5432
+PGUSER=stapubox_user
+PGPASSWORD=npg_dwAQM3ULCKs5
+PGDATABASE=stapubox_db
+# API keys (using current production values):
+TWOFACTOR_API_KEY=8e3fbee1-37bf-11f0-8b17-0200cd936042
+BREVO_API_KEY=your_brevo_api_key
+GOOGLE_MAPS_API_KEY=AIzaSyDgvWsa_ZEAtV2WIJfz9h845RUrwgfoXpA
+# AWS S3 credentials for profile picture uploads (REQUIRED):
+AWS_ACCESS_KEY_ID=your_aws_access_key
+AWS_SECRET_ACCESS_KEY=your_aws_secret_key
+AWS_REGION=eu-north-1
+AWS_S3_BUCKET_NAME=stapubox-replit-data
+# Session secret (generate a random string)
+SESSION_SECRET=your_very_long_random_secret_string_here
+
+
+current Nginx configuration 
+##
+# StapuBox Root Domain Configuration
+# This serves StapuBox directly from https://stapubox.com/
+##
+
+# Map User-Agent to mobile detection variable
+map $http_user_agent $is_mobile {
+    default 0;
+    ~*android.*mobile 1;
+    ~*iphone 1;
+    ~*ipod 1;
+    ~*blackberry 1;
+    ~*iemobile 1;
+    ~*opera.*(mini|mobi) 1;
+    ~*mobile.*safari 1;
+    ~*mobile.*firefox 1;
+    ~*windows.*phone 1;
+    ~*mobile 1;
+    ~*mobi 1;
+    ~*(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge|maemo|midp|mmp|mobile.+firefox|netfront|opera.m(ob|in)i|palm(.os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows.ce|xda|xiino 1;
+}
+
+map $is_mobile $device_type {
+    default "desktop";
+    1 "mobile";
+}
+
+server { 
+    server_name www.stapubox.com stapubox.com; 
+
+    if ($host = www.stapubox.com) {
+        return 301 https://stapubox.com$request_uri;
+    }
+
+
+    # Legacy services - Keep existing buzz and dashboard
+    location /buzz/ {
+        proxy_pass http://localhost:2031/buzz/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /dashboard/ {
+        proxy_pass http://localhost:2031/dashboard/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+
+    # Legacy /app path redirect to root for existing links
+    location /app/ {
+        return 301 https://stapubox.com$request_uri;
+    }
+
+
+    # Error page handling
+    error_page 404 = @notfound;
+    location @notfound {
+        # Serve 404 through StapuBox instead of redirecting
+        proxy_pass http://localhost:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # StapuBox Main App - Serve from root (LOWEST PRIORITY)
+    location / {
+        proxy_pass http://localhost:3000/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_set_header X-Forwarded-Port $server_port;
+    }
+
+    listen 443 ssl;
+    ssl_certificate /etc/letsencrypt/live/stapubox.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/stapubox.com/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    # Rate Limiter
+    limit_req zone=one burst=20 nodelay;
+}
+
+# HTTP to HTTPS redirect
+server {
+    if ($host = www.stapubox.com) {
+        return 301 https://$host$request_uri;
+    }
+
+    if ($host = stapubox.com) {
+        return 301 https://$host$request_uri;
+    }
+
+    listen 80; 
+    server_name www.stapubox.com stapubox.com;
+    return 404;
+}
+
+
+I want to serve api : [https://stapubox.com/dashboard/buzz/digest]  &  [https://stapubox.com/buzz/digest] from another service running on 2031. 
+TODO: currently node service is down
+1.) create dev and prod file with values
+2.) steps to configure nginx and how to run the code
+, explaing the commands and what they do
+
+last time below curl was giving 404
+curl --location 'https://stapubox.com/api/auth/send-otp' \
+--header 'accept: */*' \
+--header 'accept-language: en-US,en;q=0.9' \
+--header 'content-type: application/json' \
+--header 'origin: https://stapubox.com' \
+--header 'priority: u=1, i' \
+--header 'referer: https://stapubox.com/login' \
+--header 'sec-ch-ua: "Not)A;Brand";v="8", "Chromium";v="138", "Google Chrome";v="138"' \
+--header 'sec-ch-ua-mobile: ?0' \
+--header 'sec-ch-ua-platform: "Linux"' \
+--header 'sec-fetch-dest: empty' \
+--header 'sec-fetch-mode: cors' \
+--header 'sec-fetch-site: same-origin' \
+--header 'user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36' \
+--data '{"phoneNumber":"9871430493"}'
+
+&
+
+curl --location 'https://stapubox.com/api/users/send-otp' \
+--header 'accept: */*' \
+--header 'accept-language: en-US,en;q=0.9' \
+--header 'content-type: application/json' \
+--header 'origin: https://stapubox.com' \
+--header 'priority: u=1, i' \
+--header 'referer: https://stapubox.com/login' \
+--header 'sec-ch-ua: "Not)A;Brand";v="8", "Chromium";v="138", "Google Chrome";v="138"' \
+--header 'sec-ch-ua-mobile: ?0' \
+--header 'sec-ch-ua-platform: "Linux"' \
+--header 'sec-fetch-dest: empty' \
+--header 'sec-fetch-mode: cors' \
+--header 'sec-fetch-site: same-origin' \
+--header 'user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36' \
+--data '{"phoneNumber":"9871430493"}'
+
+
+3.) complete comprehensive deployment guide which a 12 year kid can do with basic ubunut knowledge
+4.) comphrensive guide regarding the issues which we faced while deployment and what was the issue and how we fixed it. it should be crisp, not novel like. something worth to know

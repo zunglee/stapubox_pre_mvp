@@ -1,0 +1,134 @@
+🔍 Debugging app startup issue...
+📋 PM2 Error Logs:
+[TAILING] Tailing last 20 lines for [stapubox] process (change the value with --lines option)
+/root/.pm2/logs/stapubox-error-0.log last 20 lines:
+0|stapubox | 💥 News ingestion failed: TypeError: Cannot read properties of null (reading 'buzz_digest')
+0|stapubox |     at NewsIngestionService.fetchNewsFromAPI (file:///apps/stapubox-replit-app/dist/index.js:875:24)
+0|stapubox |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+0|stapubox |     at async NewsIngestionService.ingestNews (file:///apps/stapubox-replit-app/dist/index.js:926:27)
+0|stapubox | You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+0|stapubox | Error: Could not find the build directory: /apps/stapubox-replit-app/dist/public, make sure to build the client first
+0|stapubox |     at serveStatic (file:///apps/stapubox-replit-app/dist/index.js:2227:11)
+0|stapubox |     at file:///apps/stapubox-replit-app/dist/index.js:2443:5
+0|stapubox | (node:73095) NOTE: The AWS SDK for JavaScript (v2) is in maintenance mode.
+0|stapubox |  SDK releases are limited to address critical bug fixes and security issues only.
+0|stapubox | 
+0|stapubox | Please migrate your code to use AWS SDK for JavaScript (v3).
+0|stapubox | For more information, check the blog post at https://a.co/cUPnyil
+0|stapubox | (Use `node --trace-warnings ...` to show where the warning was created)
+0|stapubox | (node:73191) NOTE: The AWS SDK for JavaScript (v2) is in maintenance mode.
+0|stapubox |  SDK releases are limited to address critical bug fixes and security issues only.
+0|stapubox | 
+0|stapubox | Please migrate your code to use AWS SDK for JavaScript (v3).
+0|stapubox | For more information, check the blog post at https://a.co/cUPnyil
+0|stapubox | (Use `node --trace-warnings ...` to show where the warning was created)
+
+
+📋 PM2 Output Logs:
+[TAILING] Tailing last 10 lines for [stapubox] process (change the value with --lines option)
+/root/.pm2/logs/stapubox-out-0.log last 10 lines:
+0|stapubox |       {
+0|stapubox |         "sid": 7030918,
+0|stapubox |         "buzz_id": 157,
+0|stapubox |         "sname": "cricket",
+0|stapubox |         "title": "Catch the Edgbaston Showdown Live: India vs England 2nd Test!",
+0|stapubox |         "summary": "The thrilling India vs England 2nd Test at Edgbaston is underway, promising intense cricket action. Fans can stream live and follow every ball, every run, and every wicket as the battle for series suprem...
+0|stapubox | 🔄 Duplicate news item found: https://www.news18.com/cricket/india-vs-england-live-streaming-watch-2nd-test-eng-ind-edgbaston-today-online-birmingham-9413962.html
+0|stapubox | 🛑 Duplicate found on page 1, stopping ingestion
+0|stapubox | 🎉 News ingestion completed in 0s. Total new articles: 0
+0|stapubox | 📈 Ingestion Summary: 0 new articles added to database
+
+
+🔧 PM2 Process Info:
+ Describing process with id 0 - name stapubox 
+┌───────────────────┬─────────────────────────────────────────┐
+│ status            │ online                                  │
+│ name              │ stapubox                                │
+│ namespace         │ default                                 │
+│ version           │ 1.0.0                                   │
+│ restarts          │ 0                                       │
+│ uptime            │ 6m                                      │
+│ script path       │ /apps/stapubox-replit-app/dist/index.js │
+│ script args       │ N/A                                     │
+│ error log path    │ /root/.pm2/logs/stapubox-error-0.log    │
+│ out log path      │ /root/.pm2/logs/stapubox-out-0.log      │
+│ pid path          │ /root/.pm2/pids/stapubox-0.pid          │
+│ interpreter       │ node                                    │
+│ interpreter args  │ N/A                                     │
+│ script id         │ 0                                       │
+│ exec cwd          │ /apps/stapubox-replit-app               │
+│ exec mode         │ cluster_mode                            │
+│ node.js version   │ 20.19.3                                 │
+│ node env          │ production                              │
+│ watch & reload    │ ✘                                       │
+│ unstable restarts │ 0                                       │
+│ created at        │ 2025-07-03T23:55:39.532Z                │
+└───────────────────┴─────────────────────────────────────────┘
+ Actions available 
+┌────────────────────────┐
+│ km:heapdump            │
+│ km:cpu:profiling:start │
+│ km:cpu:profiling:stop  │
+│ km:heap:sampling:start │
+│ km:heap:sampling:stop  │
+└────────────────────────┘
+ Trigger via: pm2 trigger stapubox <action_name>
+
+ Code metrics value 
+┌────────────────────────┬───────────┐
+│ Used Heap Size         │ 28.37 MiB │
+│ Heap Usage             │ 92.03 %   │
+│ Heap Size              │ 30.83 MiB │
+│ Event Loop Latency p95 │ 1.80 ms   │
+│ Event Loop Latency     │ 0.80 ms   │
+│ Active handles         │ 1         │
+│ Active requests        │ 0         │
+└────────────────────────┴───────────┘
+ Divergent env variables from local env 
+┌────────┬──────┐
+│ OLDPWD │ /tmp │
+└────────┴──────┘
+
+ Add your own code metrics: http://bit.ly/code-metrics
+ Use `pm2 logs stapubox [--lines 1000]` to display logs
+ Use `pm2 env 0` to display environment variables
+ Use `pm2 monit` to monitor CPU and Memory usage stapubox
+
+📁 Checking required files:
+Server file: -rw-r--r-- 1 root root 96611 Jul  3 23:52 dist/index.js
+Frontend file: -rw-r--r-- 1 root root 448 Jul  3 23:55 dist/public/index.html
+
+⚙️ Environment variables in PM2 config:
+module.exports = {
+  apps: [{
+    name: 'stapubox',
+    script: 'dist/index.js',
+    instances: 1,
+    autorestart: true,
+    watch: false,
+    max_memory_restart: '1G',
+    env: {
+      NODE_ENV: 'production',
+      PORT: 3000,
+      DATABASE_URL: 'postgresql://stapubox_user:npg_dwAQM3ULCKs5@localhost:5432/stapubox_db?sslmode=disable',
+      TWOFACTOR_API_KEY: '8e3fbee1-37bf-11f0-8b17-0200cd936042'
+    }
+  }]
+};
+
+🧪 Testing server file directly:
+file:///apps/stapubox-replit-app/dist/index.js:384
+  throw new Error(
+        ^
+
+Error: DATABASE_URL must be set. Did you forget to provision a database?
+    at file:///apps/stapubox-replit-app/dist/index.js:384:9
+    at ModuleJob.run (node:internal/modules/esm/module_job:263:25)
+    at async ModuleLoader.import (node:internal/modules/esm/loader:540:24)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+
+Node.js v20.19.3
+❌ Server crashes when run directly
+
+🔍 Checking for missing dependencies:
+All dependencies installed

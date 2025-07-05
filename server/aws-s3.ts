@@ -6,7 +6,7 @@ const s3Config = {
   accessKeyId: '',
   secretAccessKey: '',
   region: ''
-};
+}
 
 AWS.config.update(s3Config);
 
